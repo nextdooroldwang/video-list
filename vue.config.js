@@ -12,7 +12,7 @@ module.exports = {
 			new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
 		]
 	},
-	//别名设置
+	//alias
 	chainWebpack: config => {
 		config.resolve.alias
 			.set('@api', resolve('src/api'))
@@ -27,5 +27,7 @@ module.exports = {
 
 	lintOnSave: undefined,
 	// babel-loader no-ignore node_modules/*
-	transpileDependencies: []
+	transpileDependencies: [],
+
+	productionSourceMap: false
 }
