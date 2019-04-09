@@ -1,4 +1,4 @@
-# mobingi-ui
+# ouchan-ui
 
 ## Project setup
 ```
