@@ -1,4 +1,4 @@
-# ouchan-ui
+# Dashboard
 
 ## Project setup
 ```
