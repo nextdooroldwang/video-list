@@ -12,8 +12,13 @@ module.exports = {
 			new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
 		]
 	},
-	//alias
+
 	chainWebpack: config => {
+		//svg loader
+		const svgRule = config.module.rule('svg')
+		svgRule.uses.clear()
+		svgRule.use('vue-svg-loader').loader('vue-svg-loader')
+		//alias
 		config.resolve.alias
 			.set('@api', resolve('src/api'))
 			.set('@assets', resolve('src/assets'))

@@ -9,10 +9,6 @@ import i18n from '@/lang'
 
 Vue.config.productionTip = false
 
-import plugin from '@/plugin'
-
-Vue.use(plugin)
-
 new Vue({
 	router,
 	store,

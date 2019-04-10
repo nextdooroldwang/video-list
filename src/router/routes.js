@@ -1,3 +1,4 @@
+import { BasicLayout } from '@/components/layouts'
 /**
  * 基础路由
  * @type { *[] }
@@ -5,13 +6,18 @@
 export const constantRouterMap = [
 	{
 		path: '/',
-		name: 'home',
-		component: () => import('@/views/Home.vue')
-	},
-	{
-		path: '/about',
-		name: 'about',
-		component: () => import('@/views/About.vue')
+		name: 'index',
+		component: BasicLayout,
+		meta: { title: '首页' },
+		redirect: '/dashboard',
+		children: [
+			{
+				path: '/dashboard',
+				name: 'dashboard',
+				component: () => import('@/views/dashboard'),
+				meta: { title: '控制台', keepAlive: false, permission: ['dashboard'] }
+			}
+		]
 	},
 	{
 		path: '/404',

@@ -1,14 +1,6 @@
 <template>
   <a-locale-provider :locale="locale">
     <div id="app">
-      <demo/>
-      <m-grid :columns="'100px 100px 100px'" :rows="'120px 120px 120px'">
-        <m-item v-for="item in [1,2,3,4,5,6,7,8,9]" :key="item">{{item}}</m-item>
-      </m-grid>
-      <div id="nav">
-        <router-link to="/">Home</router-link>|
-        <router-link to="/about">About</router-link>
-      </div>
       <router-view/>
     </div>
   </a-locale-provider>

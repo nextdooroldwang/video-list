@@ -8,7 +8,7 @@
 import Vue from 'vue'
 import {
 	LocaleProvider,
-	// Layout,
+	Layout,
 	// Input,
 	// InputNumber,
 	// Button,
@@ -49,7 +49,7 @@ import {
 } from 'ant-design-vue'
 
 Vue.use(LocaleProvider)
-// Vue.use(Layout)
+Vue.use(Layout)
 // Vue.use(Input)
 // Vue.use(InputNumber)
 // Vue.use(Button)
