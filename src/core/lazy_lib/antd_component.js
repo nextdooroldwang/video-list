@@ -9,15 +9,15 @@ import Vue from 'vue'
 import {
 	LocaleProvider,
 	Layout,
-	// Input,
+	Input,
 	// InputNumber,
-	// Button,
+	Button,
 	// Switch,
 	// Radio,
 	// Checkbox,
 	// Select,
-	// Card,
-	// Form,
+	Card,
+	Form,
 	Row,
 	Col,
 	Modal,
@@ -50,15 +50,15 @@ import {
 
 Vue.use(LocaleProvider)
 Vue.use(Layout)
-// Vue.use(Input)
+Vue.use(Input)
 // Vue.use(InputNumber)
-// Vue.use(Button)
+Vue.use(Button)
 // Vue.use(Switch)
 // Vue.use(Radio)
 // Vue.use(Checkbox)
 // Vue.use(Select)
-// Vue.use(Card)
-// Vue.use(Form)
+Vue.use(Card)
+Vue.use(Form)
 Vue.use(Row)
 Vue.use(Col)
 Vue.use(Modal)
