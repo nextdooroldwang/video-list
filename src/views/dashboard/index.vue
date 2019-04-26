@@ -8,11 +8,11 @@
             <div class="title">{{item.title}}</div>
           </div>
           <div class="btn-group">
-            <div class="btn1-box">
+            <div class="btn1-box" @click="()=>go(item.url)">
               <a-icon class="m-icon" :component="item.icon1"/>
               {{item.btn1}}
             </div>
-            <div class="btn2-box">
+            <div class="btn2-box" @click="()=>go(item.url)">
               <a-icon class="m-icon" :component="item.icon2"/>
               {{item.btn2}}
             </div>
@@ -43,6 +43,7 @@ export default {
         icon1: server,
         btn2: 'Deploy an Application',
         icon2: box,
+        url: ''
       }, {
         name: 'Wave',
         logo: require('@/assets/dashboard/wave.png'),
@@ -50,7 +51,8 @@ export default {
         btn1: 'Show overall usage cost',
         icon1: bar,
         btn2: 'Show latest invoice',
-        icon2: dollar
+        icon2: dollar,
+        url: ''
       }, {
         name: 'Ripple',
         logo: require('@/assets/dashboard/ripple.png'),
@@ -58,7 +60,8 @@ export default {
         btn1: 'Create a billing group',
         icon1: friends,
         btn2: 'Generate invoice',
-        icon2: dollar
+        icon2: dollar,
+        url: ''
       }, {
         name: 'RBAC',
         logo: require('@/assets/dashboard/rbac.png'),
@@ -66,8 +69,14 @@ export default {
         btn1: 'Create a User',
         icon1: user,
         btn2: 'Create a Role',
-        icon2: scroll
+        icon2: scroll,
+        url: 'http://localhost:8080'
       }]
+    }
+  },
+  methods: {
+    go (url) {
+      window.location.href = url
     }
   },
 }

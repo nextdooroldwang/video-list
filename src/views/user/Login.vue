@@ -72,24 +72,10 @@ export default {
     ChangeLang
   },
   data () {
-    const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
-        callback(new Error(this.$t('login.validatauser')))
-      } else {
-        callback()
-      }
-    }
-    const validatePass = (rule, value, callback) => {
-      if (value.length < 5) {
-        callback(new Error(this.$t('login.validatapsw')))
-      } else {
-        callback()
-      }
-    }
     return {
       loginForm: {
-        username: 'admin',
-        password: 'admin'
+        username: 'dev@mobingi.com',
+        password: 'u6EczQ4We6frXSA2'
       },
       loginRules: {
         username: {
@@ -128,17 +114,15 @@ export default {
     },
     handleLogin () {
       if (this.validate()) {
-        // this.loading = true
-        // this.$store.dispatch('Login', this.loginForm).then(() => {
-        //   this.loading = false
-        //   this.$router.push({
-        //     path: this.redirect || '/'
-        //   })
-        // }).catch(() => {
-        //   this.loading = false
-        // })
-        this.$router.push({
-          path: this.redirect || '/dashboard'
+        this.loading = true
+
+        this.$store.dispatch('Login', this.loginForm).then(() => {
+          this.loading = false
+          this.$router.push({
+            path: this.redirect || '/'
+          })
+        }).catch(() => {
+          this.loading = false
         })
       } else {
         console.log('error submit!!')

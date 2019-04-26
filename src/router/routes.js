@@ -23,7 +23,7 @@ export const constantRouterMap = [
 		name: 'index',
 		component: BasicLayout,
 		meta: { title: '首页' },
-		redirect: '/user',
+		redirect: '/dashboard',
 		children: [
 			{
 				path: '/dashboard',

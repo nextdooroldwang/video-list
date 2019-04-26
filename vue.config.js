@@ -5,12 +5,35 @@ function resolve(dir) {
 	return path.join(__dirname, dir)
 }
 
+const utils = {
+	assetsPath: function(_path) {
+		const assetsSubDirectory = process.env.NODE_ENV === 'production' ? 'static' : 'static'
+
+		return path.posix.join(assetsSubDirectory, _path)
+	},
+	resolve: function(dir) {
+		return path.join(__dirname, '..', dir)
+	}
+}
+
 module.exports = {
 	configureWebpack: {
 		plugins: [
 			// Ignore all locale files of moment.js
 			new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
-		]
+		],
+		module: {
+			rules: [
+				{
+					test: /\.(woff2?|eot|ttf|otf)(\?.*)$/,
+					loader: 'url-loader',
+					options: {
+						limit: 10000,
+						name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+					}
+				}
+			]
+		}
 	},
 
 	chainWebpack: config => {
@@ -27,7 +50,15 @@ module.exports = {
 	},
 
 	devServer: {
-		proxy: 'https://www.easy-mock.com/mock/5c90bab5faf3d525b28586f2'
+		proxy: {
+			'/token': {
+				target: 'https://logindev.mobingi.com/access_token', //代理接口
+				changeOrigin: true,
+				pathRewrite: {
+					'^/token': '' //代理的路径
+				}
+			}
+		}
 	},
 
 	lintOnSave: undefined,

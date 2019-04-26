@@ -6,6 +6,7 @@ import '@/core/lazy_lib/antd_component'
 import '@/core/use'
 import 'ant-design-vue/dist/antd.css'
 import i18n from '@/lang'
+import './permission'
 
 Vue.config.productionTip = false
 
