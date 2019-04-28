@@ -8,11 +8,11 @@
             <div class="title">{{item.title}}</div>
           </div>
           <div class="btn-group">
-            <div class="btn1-box" @click="()=>go(item.url)">
+            <div class="btn1-box" @click="()=>go(item.url+'?modal=user')">
               <a-icon class="m-icon" :component="item.icon1"/>
               {{item.btn1}}
             </div>
-            <div class="btn2-box" @click="()=>go(item.url)">
+            <div class="btn2-box" @click="()=>go(item.url+'?modal=role')">
               <a-icon class="m-icon" :component="item.icon2"/>
               {{item.btn2}}
             </div>
