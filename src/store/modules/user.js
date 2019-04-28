@@ -1,9 +1,9 @@
-import { TOKEN } from '@/store/mutation-types'
-import { getStore, setStore, clearStore } from '@/utils/storage'
+import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { login, getInfo, logout } from '@/api/login'
+import Cookies from 'js-cookie'
 const app = {
 	state: {
-		token: getStore(TOKEN)
+		token: Cookies.get(ACCESS_TOKEN)
 	},
 	mutations: {
 		SET_TOKEN: (state, token) => {
@@ -15,7 +15,7 @@ const app = {
 			return new Promise((resolve, reject) => {
 				login(userInfo)
 					.then(response => {
-						setStore(TOKEN, response.access_token, 7 * 24 * 60 * 60 * 1000)
+						Cookies.set(ACCESS_TOKEN, response.access_token, { expires: 1 })
 						commit('SET_TOKEN', response.access_token)
 						resolve()
 					})
@@ -28,7 +28,7 @@ const app = {
 		Logout({ commit, state }) {
 			return new Promise(resolve => {
 				commit('SET_TOKEN', '')
-				clearStore(TOKEN)
+				Cookies.remove(ACCESS_TOKEN)
 
 				logout(state.token)
 					.then(() => {

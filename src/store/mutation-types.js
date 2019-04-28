@@ -1,2 +1,2 @@
 export const LANG = 'LANG'
-export const TOKEN = 'TOKEN'
+export const ACCESS_TOKEN = 'ACCESS_TOKEN'
