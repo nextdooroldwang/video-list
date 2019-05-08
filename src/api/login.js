@@ -13,7 +13,7 @@ export function login({ username, password }) {
 	formData.append('password', password)
 	console.log(formData)
 	return axios({
-		url: '/token',
+		url: 'https://logindev.mobingi.com/access_token',
 		method: 'post',
 		data: formData
 	})

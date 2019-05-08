@@ -70,7 +70,7 @@ export default {
         icon1: user,
         btn2: 'Create a Role',
         icon2: scroll,
-        url: 'http://localhost:8080'
+        url: 'http://mobingi-rbac-ui.s3-website-ap-northeast-1.amazonaws.com/dashboard'
       }]
     }
   },
