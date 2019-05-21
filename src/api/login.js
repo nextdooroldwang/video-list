@@ -11,7 +11,6 @@ export function login({ username, password }) {
 	formData.append('scope', 'openid')
 	formData.append('username', username)
 	formData.append('password', password)
-	console.log(formData)
 	return axios({
 		url: 'https://logindev.mobingi.com/access_token',
 		method: 'post',
