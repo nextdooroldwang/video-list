@@ -8,11 +8,11 @@
             <div class="title">{{item.title}}</div>
           </div>
           <div class="btn-group">
-            <div class="btn1-box" @click="()=>go(item.url+'?modal=user')">
+            <div class="btn1-box" @click="()=>go(item.url+'?modal=1')">
               <a-icon class="m-icon" :component="item.icon1"/>
               {{item.btn1}}
             </div>
-            <div class="btn2-box" @click="()=>go(item.url+'?modal=role')">
+            <div class="btn2-box" @click="()=>go(item.url+'?modal=2')">
               <a-icon class="m-icon" :component="item.icon2"/>
               {{item.btn2}}
             </div>
@@ -43,7 +43,7 @@ export default {
         icon1: server,
         btn2: 'Deploy an Application',
         icon2: box,
-        url: ''
+        url: 'https://app.mobingi.com/ocean'
       }, {
         name: 'Wave',
         logo: require('@/assets/dashboard/wave.png'),
@@ -52,7 +52,7 @@ export default {
         icon1: bar,
         btn2: 'Show latest invoice',
         icon2: dollar,
-        url: ''
+        url: 'https://app.mobingi.com/wave'
       }, {
         name: 'Ripple',
         logo: require('@/assets/dashboard/ripple.png'),
@@ -61,7 +61,7 @@ export default {
         icon1: friends,
         btn2: 'Generate invoice',
         icon2: dollar,
-        url: ''
+        url: 'https://app.mobingi.com/ripple'
       }, {
         name: 'RBAC',
         logo: require('@/assets/dashboard/rbac.png'),
@@ -70,7 +70,7 @@ export default {
         icon1: user,
         btn2: 'Create a Role',
         icon2: scroll,
-        url: 'http://mobingi-rbac-ui.s3-website-ap-northeast-1.amazonaws.com/dashboard'
+        url: 'https://app.mobingi.com/users'
       }]
     }
   },
