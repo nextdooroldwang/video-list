@@ -12,7 +12,17 @@
       </div>
       <div class="setter">
         <div class="user-name">Bárbara Cotilla</div>
-        <div class="user-setting">Account Settings</div>
+        <a-dropdown class="user-setting">
+          <a href="#">
+            Account Settings
+            <a-icon type="down"/>
+          </a>
+          <a-menu slot="overlay" @click="onClick">
+            <a-menu-item>
+              <a href="javascript:;">logout</a>
+            </a-menu-item>
+          </a-menu>
+        </a-dropdown>
       </div>
     </div>
   </a-layout-header>
@@ -23,6 +33,15 @@ export default {
   name: 'GlobalHeader',
   data () {
     return {
+    }
+  },
+  methods: {
+    onClick () {
+      this.$store.dispatch('Logout').then(() => {
+        this.$router.push({
+          path: '/login'
+        })
+      })
     }
   },
 }
@@ -72,7 +91,6 @@ export default {
         font-family: OpenSans-Semibold;
         font-weight: 600;
         color: rgba(255, 255, 255, 1);
-        line-height: 19px;
       }
       .user-setting {
         width: 93px;
@@ -81,7 +99,6 @@ export default {
         font-family: OpenSans-Regular;
         font-weight: 400;
         color: rgba(255, 255, 255, 0.75);
-        line-height: 17px;
       }
     }
   }

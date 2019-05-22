@@ -29,14 +29,14 @@ const app = {
 			return new Promise(resolve => {
 				commit('SET_TOKEN', '')
 				Cookies.remove(ACCESS_TOKEN)
-
-				logout(state.token)
-					.then(() => {
-						resolve()
-					})
-					.catch(() => {
-						resolve()
-					})
+				resolve()
+				// logout(state.token)
+				// 	.then(() => {
+				// 		resolve()
+				// 	})
+				// 	.catch(() => {
+				// 		resolve()
+				// 	})
 			})
 		}
 	}

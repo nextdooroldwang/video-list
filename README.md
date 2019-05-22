@@ -7,14 +7,22 @@ yarn install
 
 ### Compiles and hot-reloads for development
 ```
-yarn run serve
+yarn serve
 ```
 
 ### Compiles and minifies for production
+####prod
 ```
-yarn run build
+yarn build
 ```
-
+####qa
+```
+yarn qa
+```
+####dev
+```
+yarn develop
+```
 ### Run your tests
 ```
 yarn run test

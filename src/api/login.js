@@ -1,5 +1,5 @@
 import { axios } from '@/utils/request'
-
+import { loginURL } from '@/config'
 export function login({ username, password }) {
 	let formData = new FormData()
 	formData.append('grant_type', 'password')
@@ -12,7 +12,7 @@ export function login({ username, password }) {
 	formData.append('username', username)
 	formData.append('password', password)
 	return axios({
-		url: 'https://logindev.mobingi.com/access_token',
+		url: loginURL + '/access_token',
 		method: 'post',
 		data: formData
 	})
