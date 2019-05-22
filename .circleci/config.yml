@@ -11,7 +11,7 @@ jobs:
         name: trigger-ouchan-build
         shell: /bin/sh
         command: |
-          if [ $CIRCLE_BRANCH = master ]; then
+          if [ $CIRCLE_BRANCH = dev ]; then
             git clone https://${MOBINGI_DEPLOYER_KEY}:@github.com/mobingilabs/ouchan.git
             cd ouchan/services/dashboard/
             git config --local user.name "mobingideployer"

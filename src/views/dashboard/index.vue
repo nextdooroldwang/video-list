@@ -43,7 +43,7 @@ export default {
         icon1: server,
         btn2: 'Deploy an Application',
         icon2: box,
-        url: 'https://app.mobingi.com/ocean'
+        url: 'https://appdev.mobingi.com/ocean'
       }, {
         name: 'Wave',
         logo: require('@/assets/dashboard/wave.png'),
@@ -52,7 +52,7 @@ export default {
         icon1: bar,
         btn2: 'Show latest invoice',
         icon2: dollar,
-        url: 'https://app.mobingi.com/wave'
+        url: 'https://appdev.mobingi.com/wave'
       }, {
         name: 'Ripple',
         logo: require('@/assets/dashboard/ripple.png'),
@@ -61,7 +61,7 @@ export default {
         icon1: friends,
         btn2: 'Generate invoice',
         icon2: dollar,
-        url: 'https://app.mobingi.com/ripple'
+        url: 'https://appdev.mobingi.com/ripple'
       }, {
         name: 'RBAC',
         logo: require('@/assets/dashboard/rbac.png'),
@@ -70,7 +70,7 @@ export default {
         icon1: user,
         btn2: 'Create a Role',
         icon2: scroll,
-        url: 'https://app.mobingi.com/users'
+        url: 'https://appdev.mobingi.com/users'
       }]
     }
   },
