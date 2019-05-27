@@ -3,7 +3,7 @@ import MGrid from './grid/grid'
 import MItem from './grid/item'
 
 let Plugin = {}
-Plugin.install = function(Vm, parms) {
+Plugin.install = function(Vm) {
 	Vm.component(Demo.name, Demo)
 	Vm.component(MGrid.name, MGrid)
 	Vm.component(MItem.name, MItem)

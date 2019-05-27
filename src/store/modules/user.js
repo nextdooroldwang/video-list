@@ -1,5 +1,5 @@
 import { ACCESS_TOKEN } from '@/store/mutation-types'
-import { login, getInfo, logout } from '@/api/login'
+import { login } from '@/api/login'
 import Cookies from 'js-cookie'
 const app = {
 	state: {
@@ -25,7 +25,7 @@ const app = {
 					})
 			})
 		},
-		Logout({ commit, state }) {
+		Logout({ commit }) {
 			return new Promise(resolve => {
 				commit('SET_TOKEN', '')
 				Cookies.remove(ACCESS_TOKEN)
