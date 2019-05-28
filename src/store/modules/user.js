@@ -11,33 +11,18 @@ const app = {
 		}
 	},
 	actions: {
-		Login({ commit }, userInfo) {
-			return new Promise((resolve, reject) => {
-				login(userInfo)
-					.then(response => {
-						Cookies.set(ACCESS_TOKEN, response.access_token, { expires: 1 })
-						commit('SET_TOKEN', response.access_token)
-						resolve()
-					})
-					.catch(error => {
-						console.log(error)
-						reject(error)
-					})
-			})
+		async Login({ commit }, userInfo) {
+			try {
+				const response = await login(userInfo)
+				Cookies.set(ACCESS_TOKEN, response.access_token, { expires: 1 })
+				commit('SET_TOKEN', response.access_token)
+			} catch(error) {
+				console.log(error)
+			}
 		},
 		Logout({ commit }) {
-			return new Promise(resolve => {
-				commit('SET_TOKEN', '')
-				Cookies.remove(ACCESS_TOKEN)
-				resolve()
-				// logout(state.token)
-				// 	.then(() => {
-				// 		resolve()
-				// 	})
-				// 	.catch(() => {
-				// 		resolve()
-				// 	})
-			})
+			commit('SET_TOKEN', '')
+			Cookies.remove(ACCESS_TOKEN)
 		}
 	}
 }

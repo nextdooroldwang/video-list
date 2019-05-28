@@ -7,7 +7,7 @@ export const baseURL = {
 	prod: 'https://app.mobingi.com',
 	qa: 'https://appqa.mobingi.com',
   dev: 'https://appdev.mobingi.com',
-  local: 'http://localhost:8083'
+  local: 'https://appdev.mobingi.com'
 }[env]
 
 export const loginURL = {
