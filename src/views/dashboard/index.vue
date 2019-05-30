@@ -1,80 +1,98 @@
 <template>
-  <div class="dashboard-container">
-    <a-row :gutter="33">
-      <a-col class="gutter-row" :span="6" v-for="item in project" :key="item.name">
-        <div class="gutter-box">
-          <div class="title-box">
-            <div class="logo" :style="{backgroundImage:`url(${item.logo})`}">{{item.name}}</div>
-            <div class="title">{{item.title}}</div>
-          </div>
-          <div class="btn-group">
-            <div class="btn1-box" @click="()=>go(item.url+'?modal=1')">
-              <a-icon class="m-icon" :component="item.icon1"/>
-              {{item.btn1}}
-            </div>
-            <div class="btn2-box" @click="()=>go(item.url+'?modal=2')">
-              <a-icon class="m-icon" :component="item.icon2"/>
-              {{item.btn2}}
-            </div>
-          </div>
-        </div>
+  <div class="dashboard-container" style="margin-right:5%">
+    <a-row :gutter="16">
+      <a-col :span="3" :order="1" class="gutter-row">
+        <a-timeline mode="right" style="padding-top:80px; padding-right:5px">
+          <a-timeline-item>1 hour ago</a-timeline-item>
+          <a-timeline-item color="green">2 hour ago</a-timeline-item>
+          <a-timeline-item>
+            <a-icon slot="dot" type="clock-circle-o" style="font-size: 16px;" />
+            2 hour ago
+          </a-timeline-item>
+          <a-timeline-item color="red">2015/09/01</a-timeline-item>
+          <a-timeline-item>2015/09/01</a-timeline-item>
+          <a-timeline-item>
+            <a-icon slot="dot" type="clock-circle-o" style="font-size: 16px;" />
+            2015/09/01
+          </a-timeline-item>
+        </a-timeline>
       </a-col>
-    </a-row>
+      <a-col :span="18" :order="2">
+    
+        <a-list
+          class="demo-loadmore-list"
+          :loading="loading"
+          itemLayout="horizontal"
+          :dataSource="activities"
+        >
+          <div v-if="showLoadingMore" slot="loadMore" :style="{ textAlign: 'center', marginTop: '12px', height: '32px', lineHeight: '32px' }">
+            <a-spin v-if="loadingMore" />
+            <a-button v-else @click="onLoadMore">loading more</a-button>
+          </div>
+          <a-list-item slot="renderItem" slot-scope="item">
+            <a-list-item-meta
+            >
+              <a :style="{textAlign: 'left'}" slot="title" href="https://vue.ant.design/">{{item.account}}</a>
+              <a-avatar v-if="!item.title" slot="avatar" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+            </a-list-item-meta>
+            <div style="padding-right:40px">{{item.description}}</div>
+            <div>{{item.product}}</div>
+          </a-list-item>
+        </a-list>
+      </a-col>
+    </a-row>  
   </div>
 </template>
 
 <script>
-import { baseURL } from '@/config'
-import server from '@/assets/icon/server.svg'
-import box from '@/assets/icon/box.svg'
-import bar from '@/assets/icon/chart-bar.svg'
-import dollar from '@/assets/icon/file-invoice-dollar.svg'
-import friends from '@/assets/icon/user-friends.svg'
-import user from '@/assets/icon/user.svg'
-import scroll from '@/assets/icon/scroll.svg'
 export default {
   name: 'Dashboard',
-  data () {
-    return {
-      project: [{
-        name: 'Ocean',
-        logo: require('@/assets/dashboard/ocean.png'),
-        title: 'Cloud-Native Application Lifecycle Management',
-        btn1: 'Create a Stack',
-        icon1: server,
-        btn2: 'Deploy an Application',
-        icon2: box,
-        url: baseURL + '/ocean'
-      }, {
-        name: 'Wave',
-        logo: require('@/assets/dashboard/wave.png'),
-        title: 'Cloud Cost Optimization and Management',
-        btn1: 'Show overall usage cost',
-        icon1: bar,
-        btn2: 'Show latest invoice',
-        icon2: dollar,
-        url: baseURL + '/wave'
-      }, {
-        name: 'Ripple',
-        logo: require('@/assets/dashboard/ripple.png'),
-        title: 'Billing Management for MSPs and Resellers',
-        btn1: 'Create a billing group',
-        icon1: friends,
-        btn2: 'Generate invoice',
-        icon2: dollar,
-        url: baseURL + '/ripple'
-      }, {
-        name: 'RBAC',
-        logo: require('@/assets/dashboard/rbac.png'),
-        title: 'User and Role Management for Mobbingi Services',
-        btn1: 'Create a User',
-        icon1: user,
-        btn2: 'Create a Role',
-        icon2: scroll,
-        url: baseURL + '/users'
-      }]
-    }
-  },
+  data :() =>({
+    activities : [
+      {
+        title: true,
+        account: "Account",
+        description: "Desciption",
+        product: "Product"
+      },
+      {
+        title: false,
+        account: "test1",
+        description: "doing test1",
+        product: "wave"
+      },
+      {
+        title: false,
+        account: "test2",
+        description: "doing test2",
+        product: "wave"
+      },
+      {
+        title: false,
+        account: "test3",
+        description: "doing test3",
+        product: "wave"
+      },
+      {
+        title: false,
+        account: "test3",
+        description: "doing test3",
+        product: "wave"
+      },
+      {
+        title: false,
+        account: "test3",
+        description: "doing test3",
+        product: "wave"
+      },
+      {
+        title: false,
+        account: "test3",
+        description: "doing test3",
+        product: "wave"
+      },
+    ]
+  }),
   methods: {
     go (url) {
       window.location.href = url
@@ -125,34 +143,8 @@ export default {
         font-size: 16px;
         margin: 0 14px;
       }
-      .btn1-box {
-        width: 253px;
-        height: 43px;
-        background: rgba(231, 241, 255, 1);
-        border-radius: 4px 4px 4px 0px;
-        margin-bottom: 8px;
-        display: flex;
-        align-items: center;
-        font-size: 14px;
-        font-family: "OpenSans-Semibold";
-        font-weight: 600;
-        color: rgba(0, 100, 255, 1);
-        cursor: pointer;
-      }
-      .btn2-box {
-        width: 253px;
-        height: 43px;
-        background: rgba(231, 241, 255, 1);
-        border-radius: 4px 4px 4px 0px;
-        display: flex;
-        align-items: center;
-        font-size: 14px;
-        font-family: "OpenSans-Semibold";
-        font-weight: 600;
-        color: rgba(0, 100, 255, 1);
-        cursor: pointer;
-      }
     }
   }
+  
 }
 </style>

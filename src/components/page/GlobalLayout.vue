@@ -1,48 +1,45 @@
 <template>
   <a-layout class="layout" :style="{ minHeight: '100vh' }">
-    <!-- layout header -->
     <global-header/>
-
-    <!-- layout content -->
-    <a-layout-content
-      :style="{ margin: '0 auto',padding:'30px 24px',background:'#F0F2F8', minHeight: '100%',minWidth:'1305px' }"
-    >
-      <slot></slot>
+    <a-layout-content style="padding: 0 50px">
+      <a-layout style="padding: 24px 0; background: #fff">
+        <left-sider/>
+        <a-layout-content :style="{ padding: '0 24px', minHeight: '280px' }">
+          <div style="height:100%">
+            <a-row style="height:100%">
+              <a-col :span="18"  style="height:100%" class="height-100">
+                <h3>Activities</h3>
+                <slot></slot>
+              </a-col>
+              <a-col :span="6" class="height-100" style="background-color: #05ffb0; height:100%">
+                <h3>News</h3>
+              </a-col>
+            </a-row>
+          </div>
+        </a-layout-content>
+      </a-layout>
     </a-layout-content>
-
-    <!-- layout footer -->
-    <!-- <a-layout-footer style="padding: 0">
-      <global-footer/>
-    </a-layout-footer>-->
+    <global-footer/>
   </a-layout>
 </template>
-
 <script>
-import GlobalHeader from '@/components/page/GlobalHeader'
-// import GlobalFooter from '@/components/page/GlobalFooter'
+import GlobalHeader from '@/components/page/Header'
+import GlobalFooter from '@/components/page/Footer'
+import LeftSider from '@/components/page/LeftSider'
 
 export default {
   name: 'GlobalLayout',
   components: {
     GlobalHeader,
-    // GlobalFooter,
+    GlobalFooter,
+    LeftSider
   },
   data () {
     return {
-
     }
   },
 
   mounted () {
-    // const userAgent = navigator.userAgent
-    // if (userAgent.indexOf('Edge') > -1) {
-    //   this.$nextTick(() => {
-    //     this.collapsed = !this.collapsed
-    //     setTimeout(() => {
-    //       this.collapsed = !this.collapsed
-    //     }, 16)
-    //   })
-    // }
   }
 }
 </script>
