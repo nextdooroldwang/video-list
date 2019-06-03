@@ -15,8 +15,6 @@ export default {
   min-width: 100%;
   min-height: 100%;
   padding: 20px 0;
-  background: url(../../assets/bg.png) 0px top repeat,
-    linear-gradient(to bottom, #d7bbea, #65a8f1);
   display: flex;
   justify-content: center;
   align-items: center;

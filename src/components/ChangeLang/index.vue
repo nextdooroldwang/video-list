@@ -5,23 +5,18 @@
       <a-menu-item key="ja">日本語</a-menu-item>
       <a-menu-item key="zh">中文</a-menu-item>
     </a-menu>
-    <span class="svg-container" :style="iconStyle">
-      <a-icon class="m-icon" :component="international"/>
-      <a-icon class="m-icon" :component="open"/>
-    </span>
+    <span class="svg-container" :style="iconStyle"></span>
   </a-dropdown>
 </template>
 
 <script>
 import { setStore } from '@/utils/storage'
-import international from '@/assets/icon/international.svg'
-import open from '@/assets/icon/open.svg'
+
 export default {
   name: 'ChangeLang',
   data () {
     return {
-      open,
-      international
+
     }
   },
   props: {

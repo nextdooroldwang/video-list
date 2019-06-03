@@ -2,13 +2,13 @@
   <a-layout-header class="layout-header">
     <div class="logo-box">
       <div>
-        <img src="@/assets/dashboard/logo.png" class="logo" alt="logo">
+        <img src class="logo" alt="logo">
       </div>
       <div class="breadcrumb">Dashboard</div>
     </div>
     <div class="avatar-box">
       <div>
-        <img src="@/assets/dashboard/user.png" class="avatar">
+        <img src class="avatar">
       </div>
       <div class="setter">
         <div class="user-name">Bárbara Cotilla</div>

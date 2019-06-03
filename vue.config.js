@@ -37,16 +37,26 @@ module.exports = {
 	},
 
 	chainWebpack: config => {
-		//svg loader
-		const svgRule = config.module.rule('svg')
-		svgRule.uses.clear()
-		svgRule.use('vue-svg-loader').loader('vue-svg-loader')
-		//alias
-		config.resolve.alias
-			.set('@api', resolve('src/api'))
-			.set('@assets', resolve('src/assets'))
-			.set('@components', resolve('src/components'))
-			.set('@views', resolve('src/views'))
+		// 添加新的svg-sprite-loader处理svgIcon
+		config.module
+			.rule('svgIcon')
+			.test(/\.svg$/)
+			.include.add(resolve('src/assets/icon'))
+			.end()
+			.use('svg-sprite-loader') // 一定要添加use
+			.loader('svg-sprite-loader')
+			.tap(options => {
+				options = {
+					symbolId: 'icon-[name]'
+				}
+				return options
+			})
+
+		// 原有的svg图像处理loader添加exclude
+		config.module
+			.rule('svg')
+			.exclude.add(resolve('src/assets/icon'))
+			.end()
 	},
 
 	devServer: {

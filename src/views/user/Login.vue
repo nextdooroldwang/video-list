@@ -1,19 +1,17 @@
 <template>
   <a-card class="box-card">
     <div class="login-logo">
-      <img src="@/assets/dashboard/wave.png" width="100">
+      <img src width="100">
     </div>
     <h3 class="login-title">{{$t('login.login')}}</h3>
     <a-form class="login-form">
+      <!-- <svg-icon icon-class="eye"/> -->
       <a-form-item
         :label="$t('login.user')"
         :validate-status="loginRules.username.status"
         :has-feedback="loginRules.username.status==='success'"
         :help="loginRules.username.help"
       >
-        <span class="svg-container">
-          <a-icon class="m-icon" :component="user2"/>
-        </span>
         <a-input
           @change="validate"
           v-model="loginForm.username"
@@ -27,9 +25,6 @@
         :has-feedback="loginRules.password.status==='success'"
         :help="loginRules.password.help"
       >
-        <span class="svg-container">
-          <a-icon class="m-icon" :component="psw"/>
-        </span>
         <a-input
           :type="pwdType"
           v-model="loginForm.password"
@@ -37,9 +32,6 @@
           @pressEnter="handleLogin"
           @change="validate"
         />
-        <!-- <span class="show-pwd" @click="showPwd">
-          <a-icon class="m-icon" :component="pwdType === 'password' ? eye : eyeOpen"/>
-        </span>-->
       </a-form-item>
       <!-- <a-form-item> -->
       <a-button
@@ -62,10 +54,6 @@ import {
   isvalidUsername
 } from '@/utils/validate'
 import ChangeLang from '@/components/ChangeLang'
-import user2 from '@/assets/icon/user2.svg'
-import psw from '@/assets/icon/psw.svg'
-import eye from '@/assets/icon/eye.svg'
-import eyeOpen from '@/assets/icon/eye-open.svg'
 export default {
   name: 'LoginMobingi',
   components: {
@@ -90,10 +78,6 @@ export default {
       loading: false,
       pwdType: 'password',
       redirect: undefined,
-      user2,
-      psw,
-      eye,
-      eyeOpen
     }
   },
   watch: {
@@ -166,5 +150,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/scss/mo-custom";
 </style>
