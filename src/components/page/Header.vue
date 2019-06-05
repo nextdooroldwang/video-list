@@ -1,10 +1,11 @@
 <template>
   <a-layout-header class="layout-header">
     <div class="logo-box">
-      <div>
-        <img src class="logo" alt="logo">
-      </div>
-      <div class="breadcrumb">Dashboard</div>
+      <!-- <a-icon
+        class="trigger"
+        :type="collapsed ? 'menu-unfold' : 'menu-fold'"
+        @click="handleTrigger"
+      />-->
     </div>
     <div class="avatar-box">
       <div>
@@ -33,30 +34,36 @@ export default {
   name: 'GlobalHeader',
   data () {
     return {
+      collapsed: false,
     }
   },
   methods: {
     onClick () {
       this.$store.dispatch('Logout').then(() => {
         this.$router.push({
-          path: '/login'
+          path: '/user/login'
         })
       })
+    },
+    handleTrigger () {
+      this.collapsed = !this.collapsed
+      this.$emit('trigger', this.collapsed)
     }
   },
 }
 </script>
 
 <style lang="less" scoped>
+.ant-layout-header {
+  padding-left: 0;
+}
 .layout-header {
   display: flex;
   justify-content: space-between;
-  padding-left: 31px;
   padding-right: 24px;
-  min-width: 1305px;
-  height: 60px;
-  line-height: 60px;
-  background: rgba(44, 100, 227, 1);
+  height: 64px;
+  line-height: 64px;
+  background: #fff;
   .logo-box {
     display: flex;
     align-items: center;
@@ -71,7 +78,7 @@ export default {
       font-size: 18px;
       font-family: OpenSans-Regular;
       font-weight: 400;
-      color: rgba(255, 255, 255, 1);
+      color: rgba(0, 0, 0, 1);
       line-height: 24px;
     }
   }
@@ -90,7 +97,7 @@ export default {
         font-size: 14px;
         font-family: OpenSans-Semibold;
         font-weight: 600;
-        color: rgba(255, 255, 255, 1);
+        color: rgba(0, 0, 0, 1);
       }
       .user-setting {
         width: 93px;
@@ -98,7 +105,7 @@ export default {
         font-size: 12px;
         font-family: OpenSans-Regular;
         font-weight: 400;
-        color: rgba(255, 255, 255, 0.75);
+        color: rgba(0, 0, 0, 0.75);
       }
     }
   }

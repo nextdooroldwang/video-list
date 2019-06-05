@@ -18,10 +18,10 @@ export default {
     },
   },
   computed: {
-    iconName() {
+    iconName () {
       return `#icon-${this.iconClass}`;
     },
-    svgClass() {
+    svgClass () {
       if (this.className) {
         return 'svg-icon ' + this.className;
       } else {
@@ -37,7 +37,12 @@ export default {
   width: 1em;
   height: 1em;
   vertical-align: -0.15em;
-  fill: currentColor;
   overflow: hidden;
+}
+.default {
+  fill: #949fb6;
+}
+.primary {
+  fill: #394eff;
 }
 </style>

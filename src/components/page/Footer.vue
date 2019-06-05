@@ -1,11 +1,11 @@
 <template>
   <div class="footer">
-    <div class="links">
+    <!-- <div class="links">
       <a target="_self">首页</a>
       <a href="https://github.com/mobingilabs" target="_blank">
         <a-icon type="github"/>
       </a>
-    </div>
+    </div>-->
     <div class="copyright">
       Copyright
       <a-icon type="copyright"/>2019

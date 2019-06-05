@@ -30,7 +30,6 @@ export default {
   }
   .login-logo {
     width: 100%;
-    padding: 20%;
     text-align: center;
   }
   .login-title {
@@ -53,19 +52,7 @@ export default {
       left: 80px;
     }
   }
-  .login-form {
-    padding: 20px 80px;
-    padding-bottom: 40px;
-    .svg-container {
-      position: absolute;
-      // top: 40px;
-      font-size: 24px;
-      left: -38px;
-    }
-  }
-  .ant-btn {
-    margin-top: 1rem;
-  }
+
   .login-footer {
     display: flex;
     justify-content: space-between;

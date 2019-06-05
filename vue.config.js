@@ -17,6 +17,18 @@ const utils = {
 }
 
 module.exports = {
+	css: {
+		loaderOptions: {
+			less: {
+				modifyVars: {
+					'primary-color': '#394EFF',
+					'link-color': '#394EFF',
+					'border-radius-base': '10px'
+				},
+				javascriptEnabled: true
+			}
+		}
+	},
 	configureWebpack: {
 		plugins: [
 			// Ignore all locale files of moment.js
@@ -62,10 +74,17 @@ module.exports = {
 	devServer: {
 		proxy: {
 			'/token': {
-				target: 'https://logindev.mobingi.com/access_token', //代理接口
+				target: 'http://192.168.50.166:8181', //代理接口
 				changeOrigin: true,
 				pathRewrite: {
-					'^/token': '' //代理的路径
+					'^/token': '/oauth/token' //代理的路径
+				}
+			},
+			'/api': {
+				target: 'http://192.168.50.166:8181', //代理接口
+				changeOrigin: true,
+				pathRewrite: {
+					'^/api': '/api' //代理的路径
 				}
 			}
 		}
