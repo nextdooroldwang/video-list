@@ -71,13 +71,6 @@ export default {
   color: #394eff;
 }
 
-#components-layout-demo-custom-trigger .logo {
-  height: 64px;
-  /* text-align: center; */
-  padding-left: 10%;
-  line-height: 64px;
-  font-size: 18px;
-}
 .page-transition-enter {
   opacity: 0;
 }

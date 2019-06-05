@@ -6,7 +6,9 @@
     v-model="collapsed"
     :trigger="null"
   >
-    <div class="logo">BLOOPY</div>
+    <div class="logo">
+    <img :src="logo">
+    </div>
     <s-menu
       :collapsed="collapsed"
       :menu="menus"
@@ -20,10 +22,15 @@
 
 <script>
 import SMenu from './index'
-
+import logo from '@/assets/menu_logo.png'
 export default {
   name: 'SideMenu',
   components: { SMenu },
+  data() {
+    return {
+      logo
+    }
+  },
   props: {
     mode: {
       type: String,
@@ -57,3 +64,15 @@ export default {
   }
 }
 </script>
+<style>
+.logo {
+  height: 64px;
+  text-align: center;
+  /* padding-left: 10%; */
+  line-height: 64px;
+  font-size: 18px;
+}
+.logo img {
+  width:60%    
+} 
+</style>
