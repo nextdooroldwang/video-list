@@ -10,7 +10,7 @@
         </div>
         <div class="login-logo">
           <img src="../../assets/images/login_logo.png" alt>
-          <span>服务端</span>
+          <span>运维端</span>
         </div>
         <a-form>
           <a-form-item
