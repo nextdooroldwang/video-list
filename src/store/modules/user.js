@@ -33,8 +33,8 @@ const app = {
 			return new Promise((resolve, reject) => {
 				login(userInfo)
 					.then(response => {
-						Cookies.set(ACCESS_TOKEN, response.access_token, { expires: 1 })
-						commit('SET_TOKEN', response.access_token)
+						Cookies.set(ACCESS_TOKEN, response.token_type + ' ' + response.access_token, { expires: 1 })
+						commit('SET_TOKEN', response.token_type + ' ' + response.access_token)
 						resolve()
 					})
 					.catch(error => {

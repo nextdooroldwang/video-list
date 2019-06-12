@@ -13,7 +13,7 @@
         <global-header @trigger="(t) => collapsed = t"/>
       </a-layout-header>
       <a-layout-content
-        :style="{ margin: '24px 16px', padding: '24px', background: '#fff', height: 'calc(100vh - 112px)' }"
+        :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: 'calc(100vh - 112px)' }"
       >
         <transition name="page-transition">
           <route-view/>

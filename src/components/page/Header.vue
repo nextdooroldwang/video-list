@@ -9,7 +9,7 @@
     </div>
     <div class="avatar-box">
       <div>
-        <img src class="avatar">
+        <img :src="avatar" class="avatar">
       </div>
       <div class="setter">
         <div class="user-name">Bárbara Cotilla</div>
@@ -30,11 +30,13 @@
 </template>
 
 <script>
+import avatar from '@/assets/userdefault.png';
 export default {
   name: 'GlobalHeader',
   data () {
     return {
       collapsed: false,
+      avatar
     }
   },
   methods: {

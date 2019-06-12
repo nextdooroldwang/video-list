@@ -22,8 +22,8 @@ module.exports = {
 			less: {
 				modifyVars: {
 					'primary-color': '#394EFF',
-					'link-color': '#394EFF',
-					'border-radius-base': '10px'
+					'link-color': '#394EFF'
+					// 'border-radius-base': '10px'
 				},
 				javascriptEnabled: true
 			}
@@ -74,14 +74,14 @@ module.exports = {
 	devServer: {
 		proxy: {
 			'/token': {
-				target: 'http://192.168.50.166:8181', //代理接口
+				target: 'http://47.74.34.46:8181', //代理接口
 				changeOrigin: true,
 				pathRewrite: {
 					'^/token': '/oauth/token' //代理的路径
 				}
 			},
 			'/api': {
-				target: 'http://192.168.50.166:8181', //代理接口
+				target: 'http://47.74.34.46:8181', //代理接口
 				changeOrigin: true,
 				pathRewrite: {
 					'^/api': '/api' //代理的路径

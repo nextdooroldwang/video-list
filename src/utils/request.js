@@ -9,7 +9,7 @@ import Cookies from 'js-cookie'
 const service = axios.create({
 	// baseURL: '/api', // api base_url
 	baseURL: '/',
-	timeout: 10000 // 请求超时时间
+	timeout: 30000 // 请求超时时间
 })
 
 const err = error => {
