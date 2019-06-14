@@ -48,8 +48,10 @@
         :pagination="pagination"
         :loading="loading"
         @change="handleTableChange"
-        :customRow="handleSelect"
       >
+        <template slot="company_name" slot-scope="text, record">
+          <router-link :to="`/customer/company/companydetail?id=${record.id}`">{{text}}</router-link>
+        </template>
         <template slot="service_status" slot-scope="text">
           <a-switch
             disabled
@@ -72,6 +74,7 @@ const columns = [{
 }, {
   title: '公司名称',
   dataIndex: 'company_name',
+  scopedSlots: { customRender: 'company_name' },
 }, {
   title: '管理员姓名',
   dataIndex: 'apply_name',
@@ -116,9 +119,7 @@ export default {
     this.getList(this.queryParam)
   },
   methods: {
-    // toggleAdvanced () {
-    //   this.advanced = !this.advanced
-    // },
+
     async getList (queryParam) {
       this.loading = true
       await getCustomers(queryParam).then(res => {

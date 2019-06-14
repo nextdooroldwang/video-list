@@ -2,41 +2,45 @@
   <a-card :bordered="false">
     <div class="table-page-search-wrapper">
       <a-form layout="inline">
-        <a-row :gutter="12" :style="{marginBottom: '8px'}">
-          <a-col :md="5" :sm="24">
+        <a-row :gutter="12">
+          <a-col :md="5" :sm="24" class="col1">
             <a-input v-model="queryParam.serial_number" placeholder="序列号ID"/>
           </a-col>
-          <a-col :md="5" :sm="24">
+          <a-col :md="5" :sm="24" class="col1">
             <a-input v-model="queryParam.company_name" placeholder="公司名称"/>
           </a-col>
-          <a-col :md="4" :sm="24">
+          <a-col :md="5" :sm="24" class="col1">
             <a-input v-model="queryParam.model" placeholder="型号"/>
           </a-col>
-          <a-col :md="4" :sm="24">
-            <a-input v-model="queryParam.software_version" placeholder="版本号"/>
-          </a-col>
-        </a-row>
-        <a-row :gutter="12">
-          <a-col :md="5" :sm="24">
-            <a-select v-model="queryParam.service_type" placeholder="服务类型">
-              <a-select-option value="0">全部服务</a-select-option>
-              <a-select-option value="1">教育版</a-select-option>
-              <a-select-option value="2">商务版</a-select-option>
-            </a-select>
-          </a-col>
-          <a-col :md="5" :sm="24">
-            <a-select v-model="queryParam.status" placeholder="机器人状态">
-              <a-select-option value="0">全部状态</a-select-option>
-              <a-select-option value="1">正常</a-select-option>
-              <a-select-option value="2">异常</a-select-option>
-              <a-select-option value="3">关机</a-select-option>
-            </a-select>
-          </a-col>
-          <a-col :md="8" :sm="24">
-            <a-range-picker @change="onChangeDate"/>
-          </a-col>
-          <a-col :md="{ span: 2, offset: 2 }" :sm="24">
+          <template v-if="advanced">
+            <a-col :md="5" :sm="24" class="col1">
+              <a-input v-model="queryParam.software_version" placeholder="版本号"/>
+            </a-col>
+            <a-col :md="5" :sm="24">
+              <a-select v-model="queryParam.service_type" placeholder="服务类型">
+                <a-select-option value="0">全部服务</a-select-option>
+                <a-select-option value="1">教育版</a-select-option>
+                <a-select-option value="2">商务版</a-select-option>
+              </a-select>
+            </a-col>
+            <a-col :md="5" :sm="24">
+              <a-select v-model="queryParam.status" placeholder="机器人状态">
+                <a-select-option value="0">全部状态</a-select-option>
+                <a-select-option value="1">正常</a-select-option>
+                <a-select-option value="2">异常</a-select-option>
+                <a-select-option value="3">关机</a-select-option>
+              </a-select>
+            </a-col>
+            <a-col :md="8" :sm="24">
+              <a-range-picker @change="onChangeDate"/>
+            </a-col>
+          </template>
+          <a-col :md="{ span: 3, offset: 2 }" :sm="24">
             <a-button type="primary" @click="()=>getList(queryParam)">搜索</a-button>
+            <a @click="toggleAdvanced" style="margin-left: 8px">
+              {{ advanced ? '收起' : '展开' }}
+              <a-icon :type="advanced ? 'up' : 'down'"/>
+            </a>
           </a-col>
         </a-row>
       </a-form>
@@ -47,8 +51,10 @@
         :pagination="pagination"
         :loading="loading"
         @change="handleTableChange"
-        :customRow="handleSelect"
       >
+        <template slot="serial_number" slot-scope="text, record">
+          <router-link :to="`/customer/bloopy/bloopydetail?id=${record.id}`">{{text}}</router-link>
+        </template>
         <template slot="status" slot-scope="text">
           <span
             :style="{color: text==='异常' ? 'red' : text === '关机' ? 'rgba(0,0,0,.5)' : 'inherit'}"
@@ -65,12 +71,14 @@ import moment from 'moment'
 const columns = [{
   title: '序列号ID',
   dataIndex: 'serial_number',
+  scopedSlots: { customRender: 'serial_number' },
 }, {
   title: '型号',
   dataIndex: 'model',
 }, {
   title: '公司名称',
   dataIndex: 'company_name',
+
 }, {
   title: '位置',
   dataIndex: 'position',
@@ -93,6 +101,8 @@ export default {
   name: 'BloopyList',
   data () {
     return {
+      // 高级搜索 展开/关闭
+      advanced: false,
       // 查询参数
       queryParam: {},
       // 表头
@@ -107,6 +117,9 @@ export default {
     this.getList(this.queryParam)
   },
   methods: {
+    toggleAdvanced () {
+      this.advanced = !this.advanced
+    },
     async getList (queryParam) {
       this.loading = true
       console.log(queryParam)
@@ -164,5 +177,8 @@ export default {
 <style scope>
 .table-page-search-wrapper .ant-form {
   margin-bottom: 24px;
+}
+.col1 {
+  margin-bottom: 8px;
 }
 </style>

@@ -8,8 +8,9 @@
             <div class="formRow">
               <a-form-item label="通知对象">
                 <a-select v-model="queryParam.notified_group" class="device-select">
-                  <a-select-option value="1">商务版用户</a-select-option>
-                  <a-select-option value="2">教育版用户</a-select-option>
+                  <a-select-option value="3">全部用户</a-select-option>
+                  <a-select-option value="2">商务版用户</a-select-option>
+                  <a-select-option value="1">教育版用户</a-select-option>
                 </a-select>
               </a-form-item>
               <a-form-item label="通知形式">
