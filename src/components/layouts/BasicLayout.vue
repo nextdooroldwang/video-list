@@ -12,8 +12,11 @@
       <a-layout-header style="background: #fff; padding: 0">
         <global-header @trigger="(t) => collapsed = t"/>
       </a-layout-header>
+      <div class="breadcrumb">
+        <Breadcrumb/>
+      </div>
       <a-layout-content
-        :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: 'calc(100vh - 112px)' }"
+        :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: 'calc(100vh - 160px)' }"
       >
         <transition name="page-transition">
           <route-view/>
@@ -26,6 +29,7 @@
 import GlobalHeader from '@/components/page/Header'
 import SideMenu from '@/components/menu/SideMenu'
 import RouteView from '@/components/layouts/RouteView'
+import Breadcrumb from '@/components/page/Breadcrumb'
 import { mapState } from 'vuex'
 export default {
   data () {
@@ -37,7 +41,8 @@ export default {
   components: {
     GlobalHeader,
     SideMenu,
-    RouteView
+    RouteView,
+    Breadcrumb
   },
   computed: {
     ...mapState({
@@ -58,6 +63,16 @@ export default {
 <style>
 .ant-layout-sider-children {
   background: #fff;
+  box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
+}
+.breadcrumb {
+  width: 100%;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  padding-left: 32px;
+  background: #fff;
+  margin-top: 4px;
 }
 #components-layout-demo-custom-trigger .trigger {
   font-size: 18px;

@@ -44,18 +44,27 @@ export const asyncRouterMap = [
 					},
 					{
 						path: '/customer/company',
-						name: 'CompanyList',
-
-						component: () => import('@/views/customer/CompanyList'),
-						meta: { title: '公司列表', keepAlive: false, permission: ['customer'] }
-					},
-					{
-						path: '/customer/company/companydetail',
-						name: 'CompanyDetail',
-						hidden: true,
-
-						component: () => import('@/views/customer/Company'),
-						meta: { title: '公司详情', keepAlive: false, permission: ['customer'] }
+						name: 'Company',
+						hideChildrenInMenu: true,
+						component: RouteView,
+						redirect: '/customer/company/companyList',
+						meta: { title: 'Company', keepAlive: false, permission: ['customer'] },
+						children: [
+							{
+								path: '/customer/company/companyList',
+								name: 'CompanyList',
+								hidden: true,
+								component: () => import('@/views/customer/CompanyList'),
+								meta: { title: '公司列表', keepAlive: false, permission: ['customer'] }
+							},
+							{
+								path: '/customer/company/companydetail',
+								name: 'CompanyDetail',
+								hidden: true,
+								component: () => import('@/views/customer/Company'),
+								meta: { title: '公司详情', keepAlive: false, permission: ['customer'] }
+							}
+						]
 					},
 					{
 						path: '/customer/order',
@@ -65,18 +74,27 @@ export const asyncRouterMap = [
 					},
 					{
 						path: '/customer/bloopy',
-						name: 'BloopyList',
-
-						component: () => import('@/views/customer/BloopyList'),
-						meta: { title: 'Bloopy列表', keepAlive: false, permission: ['customer'] }
-					},
-					{
-						path: '/customer/bloopy/bloopydetail',
-						name: 'BloopyDetail',
-						hidden: true,
-
-						component: () => import('@/views/customer/Bloopy'),
-						meta: { title: 'Bloopy', keepAlive: false, permission: ['customer'] }
+						name: 'Bloopy',
+						hideChildrenInMenu: true,
+						component: RouteView,
+						redirect: '/customer/bloopy/bloopyList',
+						meta: { title: 'Bloopy', keepAlive: false, permission: ['customer'] },
+						children: [
+							{
+								path: '/customer/bloopy/bloopyList',
+								name: 'BloopyList',
+								hidden: true,
+								component: () => import('@/views/customer/BloopyList'),
+								meta: { title: 'Bloopy列表', keepAlive: false, permission: ['customer'] }
+							},
+							{
+								path: '/customer/bloopy/bloopydetail',
+								name: 'BloopyDetail',
+								hidden: true,
+								component: () => import('@/views/customer/Bloopy'),
+								meta: { title: 'Bloopy详情', keepAlive: false, permission: ['customer'] }
+							}
+						]
 					},
 					{
 						path: '/customer/remote',
