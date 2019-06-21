@@ -19,9 +19,15 @@
             </div>
 
             <div class="line"></div>
-            <div class="item">
+            <div class="item tag">
               <span class="label label1">指定机器人</span>
-              <span class="text">{{description}}</span>
+              <span class="text">
+                <a-tag
+                  v-for="item in bloopies"
+                  :style="{margin:'0 16px 8px 0'}"
+                  :key="item.serial_number"
+                >{{item.serial_number}}</a-tag>
+              </span>
             </div>
             <div class="item">
               <span class="label">更新时间</span>
@@ -102,6 +108,7 @@ export default {
       operator: '',
       created_at: '',
       type: '',
+      bloopies: [],
 
       // 表头
       columns,
@@ -109,6 +116,7 @@ export default {
       data: [],
       dataCurrent: [],
       loading: false,
+      keepId: ''
     }
   },
   filters: {
@@ -119,9 +127,16 @@ export default {
   created () {
     this.init()
   },
+  activated () {
+    if (this.keepId && (this.keepId !== this.$route.params.id)) {
+
+      this.init()
+    }
+  },
   methods: {
     init () {
       this.getDetail()
+      this.keepId = this.$route.params.id
     },
     async getDetail () {
       this.loading = true
@@ -134,6 +149,7 @@ export default {
         this.operator = data.operator
         this.created_at = data.created_at
         this.type = data.type
+        this.bloopies = data.bloopies.data
 
         let pagination = {
           total: data.upgrade_record.data.length,
@@ -193,7 +209,6 @@ export default {
         }
         .label1 {
           align-self: flex-start;
-          margin-top: 8px;
         }
         .btn1 {
           align-self: flex-start;
@@ -209,6 +224,9 @@ export default {
         .input2 {
           width: 244px;
           margin-right: 8px;
+        }
+        .tag {
+          flex-wrap: wrap;
         }
       }
     }

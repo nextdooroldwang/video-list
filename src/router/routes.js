@@ -215,7 +215,7 @@ export const asyncRouterMap = [
 								name: 'UploadDetail',
 								hidden: true,
 								component: () => import('@/views/version/UploadDetail'),
-								meta: { title: '版本发布详情', keepAlive: false, permission: ['version'] }
+								meta: { title: '版本发布详情', keepAlive: true, permission: ['version'] }
 							},
 							{
 								path: '/version/upload/uploadNew',

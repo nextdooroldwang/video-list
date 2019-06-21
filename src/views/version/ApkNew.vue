@@ -1,40 +1,46 @@
 <template>
-  <div>
+  <div class="apk-new-container">
     <div v-show="!uping">
       <div class="title">基础信息</div>
       <div class="main">
-        <div class="info">
-          <div class="item">
-            <span class="label label1">APK文件</span>
-            <a-upload :remove="handleRemove" :beforeUpload="beforeUpload" :fileList="fileList">
-              <a-button>
-                <a-icon type="upload"/>上传文件
-              </a-button>
-            </a-upload>
-          </div>
-          <div class="item">
-            <span class="label">版本号</span>
-            <a-input placeholder="请输入..." class="input" v-model="info.version"/>
-          </div>
-          <div class="item">
-            <span class="label label1">主要变更功能</span>
-            <a-textarea placeholder="请输入..." :rows="3" class="input" v-model="info.description"/>
-          </div>
+        <a-skeleton :loading="skeletonLoading" active>
+          <div class="info">
+            <div class="item">
+              <span class="label label1">APK文件</span>
+              <a-upload :remove="handleRemove" :beforeUpload="beforeUpload" :fileList="fileList">
+                <a-button>
+                  <a-icon type="upload"/>上传文件
+                </a-button>
+              </a-upload>
+            </div>
+            <div class="item">
+              <span class="label">版本号</span>
+              <a-input placeholder="请输入..." class="input" v-model="info.version"/>
+            </div>
+            <div class="item">
+              <span class="label label1">主要变更功能</span>
+              <a-textarea placeholder="请输入..." :rows="3" class="input" v-model="info.description"/>
+            </div>
 
-          <div class="line"></div>
-          <div class="item" v-if="id">
-            <span class="label">上传时间</span>
-            <span class="text">{{info.created_at|conversion}}</span>
+            <div class="line"></div>
+            <div class="item" v-if="id">
+              <span class="label">上传时间</span>
+              <span class="text">{{info.created_at|conversion}}</span>
+            </div>
+            <div class="item" v-if="id">
+              <span class="label">上传人</span>
+              <span class="text">{{info.operator||'无'}}</span>
+            </div>
+            <div class="line" v-if="id"></div>
+            <div :style="{textAlign:'center'}">
+              <a-button
+                type="primary"
+                @click="()=>{onSend(onProgress)}"
+                :loading="uploading"
+              >上传APK文件包</a-button>
+            </div>
           </div>
-          <div class="item" v-if="id">
-            <span class="label">上传人</span>
-            <span class="text">{{info.operator||'无'}}</span>
-          </div>
-          <div class="line" v-if="id"></div>
-          <div :style="{textAlign:'center'}">
-            <a-button type="primary" @click="()=>{onSend(onProgress)}" :loading="uploading">上传APK文件包</a-button>
-          </div>
-        </div>
+        </a-skeleton>
       </div>
     </div>
     <div v-show="uping">
@@ -62,6 +68,7 @@ export default {
       },
 
       keepId: '',
+      skeletonLoading: false,
       fileList: [],
       uploading: false,
       uping: false,
@@ -96,10 +103,12 @@ export default {
       }
 
     },
-    getData (params) {
-      getApk(params).then(res => {
+    async getData (params) {
+      this.skeletonLoading = true
+      await getApk(params).then(res => {
         this.info = res
       })
+      this.skeletonLoading = false
     },
     handleRemove (file) {
       const index = this.fileList.indexOf(file);
@@ -150,66 +159,68 @@ export default {
   },
 }
 </script>
-<style rel="stylesheet/scss" lang="scss" scoped>
-.title {
-  background: #f0f2f5;
-  font-size: 16px;
-  border-radius: 4px;
-  padding: 12px 24px;
-  color: rgba(0, 0, 0, 0.65);
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-}
-.main {
-  display: flex;
-  min-height: 200px;
-  padding: 24px 48px 24px 72px;
-  .info {
-    flex: 1;
-    .item {
-      display: flex;
-      padding: 8px 0;
-      align-items: center;
-      .label {
-        font-weight: 700;
-        text-align: right;
-        margin-right: 64px;
-        min-width: 100px;
-      }
-      .label1 {
-        align-self: flex-start;
-        margin-top: 8px;
-      }
-      .text-down {
-        margin-left: 64px;
-        color: #394eff;
-        cursor: pointer;
-      }
-      .input {
-        width: 300px;
+<style rel="stylesheet/scss" lang="scss">
+.apk-new-container {
+  .title {
+    background: #f0f2f5;
+    font-size: 16px;
+    border-radius: 4px;
+    padding: 12px 24px;
+    color: rgba(0, 0, 0, 0.65);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+  }
+  .main {
+    display: flex;
+    min-height: 200px;
+    padding: 24px 48px 24px 72px;
+    .info {
+      flex: 1;
+      .item {
+        display: flex;
+        padding: 8px 0;
+        align-items: center;
+        .label {
+          font-weight: 700;
+          text-align: right;
+          margin-right: 64px;
+          min-width: 100px;
+        }
+        .label1 {
+          align-self: flex-start;
+          margin-top: 8px;
+        }
+        .text-down {
+          margin-left: 64px;
+          color: #394eff;
+          cursor: pointer;
+        }
+        .input {
+          width: 300px;
+        }
       }
     }
-  }
-  .logo {
-    height: 200px;
-    img {
-      max-height: 100%;
-      width: auto;
+    .logo {
+      height: 200px;
+      img {
+        max-height: 100%;
+        width: auto;
+      }
+    }
+    .line {
+      width: 100%;
+      height: 1px;
+      border-bottom: 1px solid #eee;
+      margin: 16px 0;
     }
   }
-  .line {
-    width: 100%;
-    height: 1px;
-    border-bottom: 1px solid #eee;
-    margin: 16px 0;
-  }
-}
-.percent {
-  display: flex;
-  justify-content: center;
-  * {
-    text-align: center;
+  .percent {
+    display: flex;
+    justify-content: center;
+    * {
+      text-align: center;
+    }
   }
 }
 </style>

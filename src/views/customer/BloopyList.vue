@@ -66,7 +66,7 @@
               更多
               <a-icon type="down"/>
             </a>
-            <a-menu slot="overlay" @click="onDrop">
+            <a-menu slot="overlay" @click="(e)=>onDrop(e,record.id)">
               <a-menu-item key="1">升级软件版本</a-menu-item>
               <a-menu-item disabled key="2">查看操作记录</a-menu-item>
               <a-menu-item disabled key="3">远程重启</a-menu-item>
@@ -76,12 +76,41 @@
         </template>
       </a-table>
     </div>
+    <a-modal
+      title="请选择已有版本"
+      v-model="visible"
+      @ok="handleOk"
+      width="800px"
+      okText="确定更新"
+      :okButtonProps="{ props: {disabled: uping} }"
+    >
+      <step-update
+        :percent="percent"
+        :status="status"
+        :statusInfo="statusInfo"
+        :count="1"
+        v-show="uping"
+        @done="onDone"
+      />
+      <a-table
+        v-show="!uping"
+        :columns="columnsVersion"
+        :rowKey="record => record.id"
+        :dataSource="dataCurrentVersion"
+        :pagination="paginationVersion"
+        :loading="loadingVersion"
+        @change="handleTableChangeVersion"
+        :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
+      ></a-table>
+    </a-modal>
   </a-card>
 </template>
 
 <script>
 import { getBloopys } from '@/api/customers'
+import { getApks, createRelease } from '@/api/version'
 import moment from 'moment'
+import StepUpdate from '@/components/step/Bloopy'
 const columns = [{
   title: '序列号ID',
   dataIndex: 'serial_number',
@@ -115,6 +144,19 @@ const columns = [{
   scopedSlots: { customRender: 'action' },
 }];
 
+const columnsVersion = [{
+  title: '版本号',
+  dataIndex: 'version',
+}, {
+  title: '文件路径URL',
+  dataIndex: 'dir',
+}, {
+  title: '上传时间',
+  dataIndex: 'created_at',
+}, {
+  title: '上传人',
+  dataIndex: 'operator',
+}];
 export default {
   name: 'BloopyList',
   data () {
@@ -129,8 +171,26 @@ export default {
       data: [],
       dataCurrent: [],
       loading: false,
-      searchLoading: false
+      searchLoading: false,
+
+      visible: false,
+      uping: false,
+      percent: 0,
+      status: 'normal',
+      statusInfo: '',
+      id: null,
+
+      columnsVersion,
+      paginationVersion: {},
+      dataVersion: [],
+      dataCurrentVersion: [],
+      loadingVersion: false,
+      selectedRowKeys: []
+
     }
+  },
+  components: {
+    StepUpdate
   },
   created () {
     this.getList(this.queryParam)
@@ -179,8 +239,11 @@ export default {
       await this.getList(this.queryParam)
       this.searchLoading = false
     },
-    onDrop (e) {
-      console.log(e.key)
+    onDrop (e, id) {
+      if (e.key == 1) {
+        this.id = id
+        this.update()
+      }
     },
     handleSelect (row) {
       return {
@@ -196,6 +259,75 @@ export default {
         },
 
       }
+    },
+    update () {
+      this.visible = true
+      this.getVersion()
+    },
+    async getVersion () {
+      this.loadingVersion = true
+      await getApks().then(res => {
+        let data = res.data
+        data = data.map(item => {
+          item.created_at = moment(item.created_at).format('YYYY-MM-DD HH:mm') || '无'
+          return item
+        })
+        let pagination = {
+          total: data.length,
+          pageSize: 10,
+          current: 1
+        }
+        this.paginationVersion = pagination
+        this.dataVersion = data
+
+        let { pageSize } = this.paginationVersion
+        this.dataCurrentVersion = data.slice(1 * pageSize - pageSize, 1 * pageSize)
+      })
+      this.loadingVersion = false
+    },
+    async onSend (onProgress) {
+      this.uping = true
+      const { selectedRowKeys } = this;
+      let p = {
+        bloopy: [this.id],
+        type: '1',
+        software_id: selectedRowKeys[0]
+      }
+
+      createRelease(p, onProgress).then(res => {
+        console.log(res)
+        this.$message.success('更新成功');
+        this.status = 'success'
+      }).catch(err => {
+        console.log(err.response.data.message)
+        this.$message.error('更新版本错误：' + err.response.data.message);
+        this.status = 'exception'
+        this.statusInfo = err.response.data.message
+      })
+    },
+    onDone () {
+      this.visible = false
+      this.uping = false
+    },
+    onProgress (loaded, total) {
+      this.percent = loaded / total * 100 | 0
+      console.log(loaded, total)
+
+    },
+    handleTableChangeVersion (pagination, filters, sorter) {
+      const pager = { ...this.paginationVersion };
+      pager.current = pagination.current;
+      this.paginationVersion = pager;
+      let { pageSize, current } = this.paginationVersion
+      this.dataCurrentVersion = this.dataVersion.slice(current * pageSize - pageSize, current * pageSize)
+    },
+    onSelectChange (selectedRowKeys) {
+
+      this.selectedRowKeys = selectedRowKeys.slice(-1)
+      console.log('selectedRowKeys changed: ', this.selectedRowKeys);
+    },
+    handleOk () {
+      this.selectedRowKeys.length > 0 ? this.onSend(this.onProgress) : this.$message.error('请选择一个版本');
     }
   }
 }
