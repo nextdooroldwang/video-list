@@ -45,3 +45,11 @@ export function sendMsg(parameter) {
 		data: parameter
 	})
 }
+
+export function getRemote(params) {
+	return axios({
+		url: baseURL + '/remote',
+		method: 'get',
+		params
+	})
+}

@@ -48,6 +48,11 @@
         :scroll="{ x: 1200 }"
       ></a-table>
     </div>
+    <a-modal title="请确认发送的内容" type="warning" v-model="visible" @ok="handleOk">
+      <p>{{`通知对象: ${group}`}}</p>
+      <p>{{`通知形式: ${type}`}}</p>
+      <p>{{`发送内容：${queryParam.contents}`}}</p>
+    </a-modal>
   </div>
 </template>
 <script>
@@ -89,12 +94,33 @@ export default {
       data: [],
       dataCurrent: [],
       loading: false,
-      loading2: false
+      loading2: false,
+      visible: false
     }
   },
 
   created () {
     this.getList()
+  },
+  computed: {
+    group () {
+      switch (this.queryParam.notified_group) {
+        case 1:
+          return '教育版用户';
+        case 2:
+          return '商务版用户';
+        default:
+          return '全部用户';
+      }
+    },
+    type () {
+      switch (this.queryParam.notify_type) {
+        case 1:
+          return '邮件通知';
+        default:
+          return '后台通知';
+      }
+    }
   },
   methods: {
     async getList () {
@@ -102,7 +128,7 @@ export default {
       await getMsgs().then(res => {
         let data = res.data
         data = data.map(item => {
-          item.created_at = moment(item.created_at).format('YYYY-MM-DD hh:mm') || '无'
+          item.created_at = moment(item.created_at).format('YYYY-MM-DD HH:mm') || '无'
           return item
         })
         let pagination = {
@@ -125,20 +151,23 @@ export default {
       let { pageSize, current } = this.pagination
       this.dataCurrent = this.data.slice(current * pageSize - pageSize, current * pageSize)
     },
-    async submit () {
+    submit () {
       if (this.queryParam.contents) {
-        this.loading2 = true
-        await sendMsg(this.queryParam).then(res => {
-          this.$message.success('发生成功')
-        }).catch(err => {
-          this.$message.error('发生失败：' + err)
-        })
-        this.loading2 = false
-        this.getList()
+        this.visible = true
       } else {
         this.$message.error('通知内容不能为空')
       }
-
+    },
+    async handleOk () {
+      this.visible = false
+      this.loading2 = true
+      await sendMsg(this.queryParam).then(res => {
+        this.$message.success('发生成功')
+      }).catch(err => {
+        this.$message.error('发生失败：' + err)
+      })
+      this.loading2 = false
+      this.getList()
     }
   }
 }

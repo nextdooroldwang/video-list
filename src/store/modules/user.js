@@ -51,7 +51,7 @@ const app = {
 						name: 'mobingi',
 						avatar: '',
 						role: {
-							permissionList: ['dashboard', 'customer']
+							permissionList: ['dashboard', 'customer', 'version']
 						}
 					}
 

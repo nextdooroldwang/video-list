@@ -1,6 +1,22 @@
 <template>
-  <div class="bloopy-container">
-    <div>
+  <div class="remote-container">
+    <a-form layout="inline">
+      <div v-if="!$route.query.serial_number">
+        <div :md="{ span: 6}" :sm="24" class="search">
+          <span>Bloopy序列号ID:</span>
+          <a-input v-model="queryParam.serial_number" placeholder="请输入..." class="input"/>
+          <a-button type="primary" @click="onSearch" :loading="skeletonLoading">查找Bloopy</a-button>
+        </div>
+      </div>
+      <div class="line" v-if="!$route.query.serial_number"></div>
+      <div class="edit" v-if="hadInfo">
+        <a-button @click="visible=true" :loading="skeletonLoading">升级软件版本</a-button>
+        <a-button @click="onSearch" :loading="skeletonLoading">查看操作记录</a-button>
+        <a-button @click="onSearch" :loading="skeletonLoading">远程重启</a-button>
+        <a-button @click="onSearch" :loading="skeletonLoading">远程关机</a-button>
+      </div>
+    </a-form>
+    <div v-if="hadInfo">
       <div class="title">基础信息</div>
       <div class="main">
         <a-skeleton :loading="skeletonLoading" active>
@@ -8,13 +24,6 @@
             <div class="item">
               <span class="label">序列号ID</span>
               <span class="text">{{basic_info.serial_number||'无'}}</span>
-            </div>
-            <div class="item">
-              <span class="label">远程操作</span>
-              <a-button @click="update" :loading="skeletonLoading">升级软件版本</a-button>
-              <a-button disabled :loading="skeletonLoading">查看操作记录</a-button>
-              <a-button disabled :loading="skeletonLoading">远程重启</a-button>
-              <a-button disabled :loading="skeletonLoading">远程关机</a-button>
             </div>
             <div class="item">
               <span class="label">型号</span>
@@ -48,28 +57,8 @@
         </a-skeleton>
       </div>
     </div>
-    <div>
-      <div class="title">联系人信息</div>
-      <div class="main">
-        <a-skeleton :loading="skeletonLoading" active>
-          <div class="info">
-            <div class="item">
-              <span class="label">管理员姓名</span>
-              <span class="text">{{contact_info.admin_name||'无'}}</span>
-            </div>
-            <div class="item">
-              <span class="label">电话</span>
-              <span class="text">{{contact_info.admin_phone||'无'}}</span>
-            </div>
-            <div class="item">
-              <span class="label">E-Mail</span>
-              <span class="text">{{contact_info.admin_email||'无'}}</span>
-            </div>
-          </div>
-        </a-skeleton>
-      </div>
-    </div>
-    <div>
+
+    <div v-if="hadInfo">
       <div class="title">版本信息</div>
       <div class="main">
         <a-skeleton :loading="skeletonLoading" active>
@@ -102,54 +91,53 @@
         </a-skeleton>
       </div>
     </div>
-    <div>
+    <div v-if="hadInfo">
       <div class="title">软件升级记录</div>
       <div class="main">
         <a-table
           :columns="columns"
           :rowKey="record => record.id"
-          :dataSource="dataCurrent"
+          :dataSource="data"
           :pagination="pagination"
           :loading="skeletonLoading"
           @change="handleTableChange"
           class="versionTable"
-        ></a-table>
+        >
+          <template slot="serial_number" slot-scope="text, record">
+            <router-link :to="`/customer/bloopy/bloopydetail/${record.id}`">{{text}}</router-link>
+          </template>
+          <template slot="status" slot-scope="text">
+            <span
+              :style="{color: text==='异常' ? 'red' : text === '关机' ? 'rgba(0,0,0,.5)' : 'inherit'}"
+            >{{text}}</span>
+          </template>
+        </a-table>
       </div>
     </div>
-    <a-modal
-      title="请选择已有版本"
-      v-model="visible"
-      @ok="handleOk"
-      width="800px"
-      okText="确定更新"
-      :okButtonProps="{ props: {disabled: uping} }"
-    >
-      <step-update
-        :percent="percent"
-        :status="status"
-        :statusInfo="statusInfo"
-        :count="1"
-        v-show="uping"
-        @done="onDone"
-      />
+    <a-modal title="请选择APK文件包" v-model="visible" @ok="handleOk" okText="确定更新">
       <a-table
-        v-show="!uping"
-        :columns="columnsVersion"
+        :columns="columnsApk"
         :rowKey="record => record.id"
-        :dataSource="dataCurrentVersion"
-        :pagination="paginationVersion"
-        :loading="loadingVersion"
-        @change="handleTableChangeVersion"
-        :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
-      ></a-table>
+        :dataSource="dataApk"
+        :pagination="paginationApk"
+        :loading="loadingApk"
+        @change="handleApkTableChange"
+      >
+        <template slot="serial_number" slot-scope="text, record">
+          <router-link :to="`/customer/bloopy/bloopydetail/${record.id}`">{{text}}</router-link>
+        </template>
+        <template slot="status" slot-scope="text">
+          <span
+            :style="{color: text==='异常' ? 'red' : text === '关机' ? 'rgba(0,0,0,.5)' : 'inherit'}"
+          >{{text}}</span>
+        </template>
+      </a-table>
     </a-modal>
   </div>
 </template>
 <script>
-import { getBloopy } from '@/api/customers'
-import { getApks, createRelease } from '@/api/version'
+import { getRemote } from '@/api/customers'
 import moment from 'moment'
-import StepUpdate from '@/components/step/Bloopy'
 const columns = [{
   title: '序列号ID',
   dataIndex: 'serial_number',
@@ -169,20 +157,29 @@ const columns = [{
 }, {
   title: '更新状态',
   dataIndex: 'status',
+  scopedSlots: { customRender: 'status' },
 }];
-
-const columnsVersion = [{
-  title: '版本号',
-  dataIndex: 'version',
+const columnsApk = [{
+  title: 'ID',
+  dataIndex: 'serial_number',
+  scopedSlots: { customRender: 'serial_number' },
 }, {
-  title: '文件路径URL',
-  dataIndex: 'dir',
+  title: 'APK文件',
+  dataIndex: 'model',
+}, {
+  title: '版本号',
+  dataIndex: 'company_name',
+
 }, {
   title: '上传时间',
-  dataIndex: 'created_at',
+  dataIndex: 'expire_date',
 }, {
   title: '上传人',
-  dataIndex: 'operator',
+  dataIndex: 'software_version',
+}, {
+  title: '操作',
+  dataIndex: 'status',
+  scopedSlots: { customRender: 'status' },
 }];
 export default {
   data () {
@@ -195,11 +192,6 @@ export default {
         serial_number: "",
         service_type: "",
         status: "",
-      },
-      contact_info: {
-        admin_email: "",
-        admin_name: "",
-        admin_phone: "",
       },
       version_info: {
         face_recognition_updated_at: "",
@@ -214,31 +206,21 @@ export default {
       upgrade_record: {
         data: []
       },
-      keepId: '',
       skeletonLoading: false,
       // 表头
       columns,
       pagination: {},
       data: [],
       dataCurrent: [],
+      queryParam: {},
 
       visible: false,
-      uping: false,
-      percent: 0,
-      status: 'normal',
-      statusInfo: '',
-
-      columnsVersion,
-      paginationVersion: {},
-      dataVersion: [],
-      dataCurrentVersion: [],
-      loadingVersion: false,
-      selectedRowKeys: []
-
+      columnsApk,
+      paginationApk: {},
+      dataApk: [],
+      dataCurrentApk: [],
+      hadInfo: false
     }
-  },
-  components: {
-    StepUpdate
   },
   filters: {
     conversion (value) {
@@ -248,24 +230,13 @@ export default {
   created () {
     this.init()
   },
-  activated () {
-    if (this.keepId && (this.keepId !== this.$route.params.id)) {
-      this.init()
-    }
-  },
   methods: {
     init () {
-      this.getData({ id: this.$route.params.id })
-
-      this.keepId = this.$route.params.id
-    },
-    update () {
-      this.visible = true
-      this.getVersion()
+      this.getData({ serial_number: this.$route.query.serial_number })
     },
     async getData (params) {
       this.skeletonLoading = true
-      await getBloopy(params).then(({ basic_info, contact_info, version_info, upgrade_record }) => {
+      await getRemote(params).then(({ basic_info, contact_info, version_info, upgrade_record }) => {
         this.basic_info = basic_info
         this.contact_info = contact_info
         this.version_info = version_info
@@ -284,59 +255,12 @@ export default {
 
         let { pageSize } = this.pagination
         this.dataCurrent = data.slice(1 * pageSize - pageSize, 1 * pageSize)
-
+        this.hadInfo = true
+      }).catch(err => {
+        this.hadInfo = false
+        console.log(err)
       })
       this.skeletonLoading = false
-    },
-    async getVersion () {
-      this.loadingVersion = true
-      await getApks().then(res => {
-        let data = res.data
-        data = data.map(item => {
-          item.created_at = moment(item.created_at).format('YYYY-MM-DD HH:mm') || '无'
-          return item
-        })
-        let pagination = {
-          total: data.length,
-          pageSize: 10,
-          current: 1
-        }
-        this.paginationVersion = pagination
-        this.dataVersion = data
-
-        let { pageSize } = this.paginationVersion
-        this.dataCurrentVersion = data.slice(1 * pageSize - pageSize, 1 * pageSize)
-      })
-      this.loadingVersion = false
-    },
-    async onSend (onProgress) {
-      this.uping = true
-      const { selectedRowKeys } = this;
-      let p = {
-        bloopy: [this.$route.params.id],
-        type: '1',
-        software_id: selectedRowKeys[0]
-      }
-
-      createRelease(p, onProgress).then(res => {
-        console.log(res)
-        this.$message.success('更新成功');
-        this.status = 'success'
-      }).catch(err => {
-        console.log(err.response.data.message)
-        this.$message.error('更新版本错误：' + err.response.data.message);
-        this.status = 'exception'
-        this.statusInfo = err.response.data.message
-      })
-    },
-    onDone () {
-      this.visible = false
-      this.uping = false
-    },
-    onProgress (loaded, total) {
-      this.percent = loaded / total * 100 | 0
-      console.log(loaded, total)
-
     },
     handleTableChange (pagination, filters, sorter) {
       const pager = { ...this.pagination };
@@ -345,26 +269,28 @@ export default {
       let { pageSize, current } = this.pagination
       this.dataCurrent = this.data.slice(current * pageSize - pageSize, current * pageSize)
     },
-    handleTableChangeVersion (pagination, filters, sorter) {
-      const pager = { ...this.paginationVersion };
+    handleApkTableChange (pagination, filters, sorter) {
+      const pager = { ...this.paginationApk };
       pager.current = pagination.current;
-      this.paginationVersion = pager;
-      let { pageSize, current } = this.paginationVersion
-      this.dataCurrentVersion = this.dataVersion.slice(current * pageSize - pageSize, current * pageSize)
+      this.paginationApk = pager;
+      let { pageSize, current } = this.paginationApk
+      this.dataCurrentApk = this.dataApk.slice(current * pageSize - pageSize, current * pageSize)
     },
-    onSelectChange (selectedRowKeys) {
+    onSearch () {
+      if (this.queryParam.serial_number) {
+        this.getData({ serial_number: this.queryParam.serial_number })
+      } else {
+        this.$message.error('序列号ID不能为空')
+      }
+    },
+    handleOK () {
 
-      this.selectedRowKeys = selectedRowKeys.slice(-1)
-      console.log('selectedRowKeys changed: ', this.selectedRowKeys);
-    },
-    handleOk () {
-      this.selectedRowKeys.length > 0 ? this.onSend(this.onProgress) : this.$message.error('请选择一个版本');
     }
   },
 }
 </script>
 <style rel="stylesheet/scss" lang="scss">
-.bloopy-container {
+.remote-container {
   .title {
     background: #f0f2f5;
     font-size: 16px;
@@ -383,7 +309,6 @@ export default {
       flex: 1;
       .item {
         display: flex;
-        flex-wrap: wrap;
         padding: 8px 0;
         align-items: center;
         .label {
@@ -395,10 +320,6 @@ export default {
         .text {
           margin-right: 64px;
         }
-        button {
-          margin-right: 8px;
-          width: 120px;
-        }
       }
     }
     .logo {
@@ -407,6 +328,28 @@ export default {
         max-height: 100%;
         width: auto;
       }
+    }
+  }
+  .line {
+    border-top: 1px solid #eee;
+    width: 100%;
+    height: 1px;
+    margin-top: 24px;
+  }
+  .edit {
+    text-align: center;
+
+    button {
+      margin: 36px 8px;
+      width: 160px;
+    }
+  }
+  .search {
+    display: flex;
+    align-items: center;
+    .input {
+      width: 300px;
+      margin: 0 64px 0 8px;
     }
   }
   .versionTable {

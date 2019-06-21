@@ -50,6 +50,10 @@
                 v-for="item in info.bloopies.data"
                 :key="item.id"
                 :style="{margin:'0 16px 8px 0'}"
+                @click="()=>{$router.push({
+                  name: 'BloopyDetail',
+                  params:{id:item.id}
+                })}"
               >{{item.software_version}}</a-tag>
             </span>
           </div>
@@ -113,7 +117,8 @@ export default {
         company_email: '',
         bloopies: { data: [] }
       },
-      show: false
+      show: false,
+      keepId: ''
     }
   },
   filters: {
@@ -122,13 +127,23 @@ export default {
     }
   },
   created () {
-    this.getData({ id: this.$route.query.id })
+    this.init()
+  },
+  activated () {
+    if (this.keepId && (this.keepId !== this.$route.params.id)) {
+      this.init()
+    }
   },
   methods: {
     getData (params) {
       getCustomer(params).then(res => {
         this.info = res
       })
+    },
+    init () {
+      this.getData({ id: this.$route.params.id })
+      this.keepId = this.$route.params.id
+      this.show = false
     }
   },
 }

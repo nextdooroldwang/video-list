@@ -35,8 +35,8 @@
               <a-range-picker @change="onChangeDate"/>
             </a-col>
           </template>
-          <a-col :md="{ span: 3, offset: 2 }" :sm="24">
-            <a-button type="primary" @click="()=>getList(queryParam)">搜索</a-button>
+          <a-col :md="{ span: 4, offset: 2 }" :sm="24">
+            <a-button type="primary" @click="onSearch" :loading="searchLoading">搜索</a-button>
             <a @click="toggleAdvanced" style="margin-left: 8px">
               {{ advanced ? '收起' : '展开' }}
               <a-icon :type="advanced ? 'up' : 'down'"/>
@@ -47,18 +47,32 @@
       <a-table
         :columns="columns"
         :rowKey="record => record.id"
-        :dataSource="data"
+        :dataSource="dataCurrent"
         :pagination="pagination"
         :loading="loading"
         @change="handleTableChange"
       >
         <template slot="serial_number" slot-scope="text, record">
-          <router-link :to="`/customer/bloopy/bloopydetail?id=${record.id}`">{{text}}</router-link>
+          <router-link :to="`/customer/bloopy/bloopydetail/${record.id}`">{{text}}</router-link>
         </template>
         <template slot="status" slot-scope="text">
           <span
             :style="{color: text==='异常' ? 'red' : text === '关机' ? 'rgba(0,0,0,.5)' : 'inherit'}"
           >{{text}}</span>
+        </template>
+        <template slot="action" slot-scope="text, record">
+          <a-dropdown>
+            <a class="ant-dropdown-link" href="#">
+              更多
+              <a-icon type="down"/>
+            </a>
+            <a-menu slot="overlay" @click="onDrop">
+              <a-menu-item key="1">升级软件版本</a-menu-item>
+              <a-menu-item disabled key="2">查看操作记录</a-menu-item>
+              <a-menu-item disabled key="3">远程重启</a-menu-item>
+              <a-menu-item disabled key="4">远程关机</a-menu-item>
+            </a-menu>
+          </a-dropdown>
         </template>
       </a-table>
     </div>
@@ -95,6 +109,10 @@ const columns = [{
   title: '状态',
   dataIndex: 'status',
   scopedSlots: { customRender: 'status' },
+}, {
+  title: '操作',
+  key: 'action',
+  scopedSlots: { customRender: 'action' },
 }];
 
 export default {
@@ -110,7 +128,8 @@ export default {
       pagination: {},
       data: [],
       dataCurrent: [],
-      loading: false
+      loading: false,
+      searchLoading: false
     }
   },
   created () {
@@ -122,7 +141,6 @@ export default {
     },
     async getList (queryParam) {
       this.loading = true
-      console.log(queryParam)
       await getBloopys(queryParam).then(res => {
         let data = res.data
         data = data.map(item => {
@@ -133,7 +151,7 @@ export default {
 
         let pagination = {
           total: data.length,
-          pageSize: 20,
+          pageSize: 10,
           current: 1
         }
         this.pagination = pagination
@@ -155,6 +173,14 @@ export default {
       console.log(date, dateString);
       this.queryParam.start = dateString[0]
       this.queryParam.end = dateString[1]
+    },
+    async onSearch () {
+      this.searchLoading = true
+      await this.getList(this.queryParam)
+      this.searchLoading = false
+    },
+    onDrop (e) {
+      console.log(e.key)
     },
     handleSelect (row) {
       return {

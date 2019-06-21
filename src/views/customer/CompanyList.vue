@@ -26,7 +26,7 @@
             <a-range-picker @change="onChangeDate"/>
           </a-col>
           <a-col :md="{ span: 2, offset: 1 }" :sm="24">
-            <a-button type="primary" @click="()=>getList(queryParam)">搜索</a-button>
+            <a-button type="primary" @click="onSearch" :loading="searchLoading">搜索</a-button>
           </a-col>
           <!-- </template> -->
           <!-- <a-col :md="!advanced && 8 || 24" :sm="24">
@@ -50,7 +50,7 @@
         @change="handleTableChange"
       >
         <template slot="company_name" slot-scope="text, record">
-          <router-link :to="`/customer/company/companydetail?id=${record.id}`">{{text}}</router-link>
+          <router-link :to="`/customer/company/companydetail/${record.id}`">{{text}}</router-link>
         </template>
         <template slot="service_status" slot-scope="text">
           <a-switch
@@ -69,9 +69,6 @@
 import { getCustomers } from '@/api/customers'
 import moment from 'moment'
 const columns = [{
-  title: 'ID',
-  dataIndex: 'id',
-}, {
   title: '公司名称',
   dataIndex: 'company_name',
   scopedSlots: { customRender: 'company_name' },
@@ -112,7 +109,8 @@ export default {
       pagination: {},
       data: [],
       dataCurrent: [],
-      loading: false
+      loading: false,
+      searchLoading: false
     }
   },
   created () {
@@ -135,7 +133,7 @@ export default {
 
         let pagination = {
           total: data.length,
-          pageSize: 20,
+          pageSize: 10,
           current: 1
         }
         this.pagination = pagination
@@ -157,6 +155,11 @@ export default {
       console.log(date, dateString);
       this.queryParam.start = dateString[0]
       this.queryParam.end = dateString[1]
+    },
+    async onSearch () {
+      this.searchLoading = true
+      await this.getList(this.queryParam)
+      this.searchLoading = false
     },
     handleSelect (row) {
       return {
