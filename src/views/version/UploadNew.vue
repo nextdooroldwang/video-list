@@ -55,7 +55,7 @@
           </div>
           <div class="line"></div>
           <div :style="{textAlign:'center'}">
-            <a-button type="primary" @click="()=>{onSend(onProgress)}" :loading="uploading">确定</a-button>
+            <a-button type="primary" @click="onSend" :loading="uploading">确定</a-button>
           </div>
         </div>
       </div>
@@ -72,7 +72,7 @@
         />
       </div>
     </div>
-    <a-modal title="指定机器人" v-model="visible" @ok="handleOk" width="800px" :footer="null">
+    <a-modal title="指定机器人" v-model="visible" width="800px" :footer="null">
       <a-table
         :columns="columns"
         :rowKey="record => record.id+''"
@@ -88,6 +88,9 @@
           >{{text}}</span>
         </template>
       </a-table>
+    </a-modal>
+    <a-modal title="请确认发布的内容" type="warning" v-model="visible2" @ok="handleOk">
+      <p>{{`确定发布当前版本么？`}}</p>
     </a-modal>
   </div>
 </template>
@@ -143,7 +146,8 @@ export default {
       pagination: {},
       dataCurrent: [],
       loading: false,
-      visible: false
+      visible: false,
+      visible2: false,
     }
   },
   components: {
@@ -209,17 +213,8 @@ export default {
     onSelectChange (selectedRowKeys) {
       this.hasbloopys = selectedRowKeys
     },
-    handleOk () {
-      console.log(this.hasbloopys)
-    },
-    handleTableChange (pagination, filters, sorter) {
-      const pager = { ...this.pagination };
-      pager.current = pagination.current;
-      this.pagination = pager;
-      let { pageSize, current } = this.pagination
-      this.dataCurrent = this.bloopys.slice(current * pageSize - pageSize, current * pageSize)
-    },
-    async onSend (onProgress) {
+    async handleOk () {
+      this.visible2 = false
       this.uping = true
       const { hasbloopys, id, type } = this;
       let p = {
@@ -228,7 +223,7 @@ export default {
         software_id: id
       }
       this.uploading = true
-      await createRelease(p, onProgress).then(res => {
+      await createRelease(p, this.onProgress).then(res => {
         console.log(res)
         this.detailId = res.id
         this.$message.success('更新成功');
@@ -240,6 +235,16 @@ export default {
         this.statusInfo = err.response.data.message
       })
       this.uploading = false
+    },
+    handleTableChange (pagination, filters, sorter) {
+      const pager = { ...this.pagination };
+      pager.current = pagination.current;
+      this.pagination = pager;
+      let { pageSize, current } = this.pagination
+      this.dataCurrent = this.bloopys.slice(current * pageSize - pageSize, current * pageSize)
+    },
+    onSend () {
+      this.visible2 = true
     },
     onProgress (loaded, total) {
       this.percent = loaded / total * 100 | 0

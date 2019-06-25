@@ -33,11 +33,7 @@
             </div>
             <div class="line" v-if="id"></div>
             <div :style="{textAlign:'center'}">
-              <a-button
-                type="primary"
-                @click="()=>{onSend(onProgress)}"
-                :loading="uploading"
-              >上传APK文件包</a-button>
+              <a-button type="primary" @click="onSend" :loading="uploading">上传APK文件包</a-button>
             </div>
           </div>
         </a-skeleton>
@@ -49,6 +45,11 @@
         <step-apk :percent="percent" :status="status" :statusInfo="statusInfo"/>
       </div>
     </div>
+    <a-modal title="请确认上传的内容" type="warning" v-model="visible" @ok="handleOk">
+      <p>{{`APK文件： ${fileList && (fileList.length > 0) && fileList[0].name || '无'}`}}</p>
+      <p>{{`版本号： ${info.version}`}}</p>
+      <p>{{`主要变更功能： ${info.description}`}}</p>
+    </a-modal>
   </div>
 </template>
 <script>
@@ -75,7 +76,8 @@ export default {
       id: null,
       percent: 0,
       status: 'normal',
-      statusInfo: ''
+      statusInfo: '',
+      visible: false
     }
   },
   components: {
@@ -120,7 +122,18 @@ export default {
       this.fileList = [file]
       return false;
     },
-    async onSend (onProgress) {
+    onSend () {
+      if (this.info.version && this.info.description) {
+        this.visible = true
+      } else {
+        this.$message.error('版本号或主要变更功能不能为空');
+      }
+    },
+    onProgress (loaded, total) {
+      this.percent = loaded / total * 100 | 0
+    },
+    async handleOk () {
+      this.visible = false
       this.uping = true
       const { fileList, info } = this;
       let formData = new FormData();
@@ -129,7 +142,7 @@ export default {
       formData.append('description', info.description)
       this.uploading = true
       if (this.id) {
-        await updateApk(formData, onProgress, this.id).then(res => {
+        await updateApk(formData, this.onProgress, this.id).then(res => {
           this.$message.success('上传成功');
           this.status = 'success'
         }).catch(err => {
@@ -139,7 +152,7 @@ export default {
           this.statusInfo = err.response.data.message
         })
       } else {
-        await uploadApk(formData, onProgress).then(res => {
+        await uploadApk(formData, this.onProgress).then(res => {
           this.$message.success('上传成功');
           this.status = 'success'
         }).catch(err => {
@@ -151,10 +164,6 @@ export default {
       }
 
       this.uploading = false
-    },
-    onProgress (loaded, total) {
-      this.percent = loaded / total * 100 | 0
-      console.log(loaded, total)
     }
   },
 }
