@@ -180,8 +180,6 @@ export default {
     getBloopys () {
       getBloopys().then(res => {
         let data = res.data
-
-
         let pagination = {
           total: data.length,
           pageSize: 10,
@@ -204,8 +202,8 @@ export default {
         }
       })
     },
-    handleChangeBloopy (val) {
-      console.log(this.hasbloopys)
+    handleChangeBloopy () {
+
     },
     moreBloopy () {
       this.visible = true
@@ -224,7 +222,6 @@ export default {
       }
       this.uploading = true
       await createRelease(p, this.onProgress).then(res => {
-        console.log(res)
         this.detailId = res.id
         this.$message.success('更新成功');
         this.status = 'success'
@@ -236,7 +233,7 @@ export default {
       })
       this.uploading = false
     },
-    handleTableChange (pagination, filters, sorter) {
+    handleTableChange (pagination) {
       const pager = { ...this.pagination };
       pager.current = pagination.current;
       this.pagination = pager;

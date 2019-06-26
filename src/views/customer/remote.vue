@@ -262,14 +262,14 @@ export default {
       })
       this.skeletonLoading = false
     },
-    handleTableChange (pagination, filters, sorter) {
+    handleTableChange (pagination) {
       const pager = { ...this.pagination };
       pager.current = pagination.current;
       this.pagination = pager;
       let { pageSize, current } = this.pagination
       this.dataCurrent = this.data.slice(current * pageSize - pageSize, current * pageSize)
     },
-    handleApkTableChange (pagination, filters, sorter) {
+    handleApkTableChange (pagination) {
       const pager = { ...this.paginationApk };
       pager.current = pagination.current;
       this.paginationApk = pager;

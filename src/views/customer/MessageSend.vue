@@ -144,7 +144,7 @@ export default {
       })
       this.loading = false
     },
-    handleTableChange (pagination, filters, sorter) {
+    handleTableChange (pagination) {
       const pager = { ...this.pagination }
       pager.current = pagination.current
       this.pagination = pager;
@@ -161,7 +161,7 @@ export default {
     async handleOk () {
       this.visible = false
       this.loading2 = true
-      await sendMsg(this.queryParam).then(res => {
+      await sendMsg(this.queryParam).then(() => {
         this.$message.success('发生成功')
       }).catch(err => {
         this.$message.error('发生失败：' + err)

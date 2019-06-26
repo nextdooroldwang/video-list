@@ -74,7 +74,6 @@ export default {
       this.loading = true
       await getReleases().then(res => {
         let data = res.data
-        console.log(data)
         data = data.map(item => {
           item.created_at = moment(item.created_at).format('YYYY-MM-DD HH:mm') || '无'
           return item
@@ -92,7 +91,7 @@ export default {
       })
       this.loading = false
     },
-    handleTableChange (pagination, filters, sorter) {
+    handleTableChange (pagination) {
       const pager = { ...this.pagination };
       pager.current = pagination.current;
       this.pagination = pager;

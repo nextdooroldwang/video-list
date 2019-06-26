@@ -77,7 +77,6 @@ export default {
     this.getList()
   },
   methods: {
-
     async getList () {
       this.loading = true
       await getApks().then(res => {
@@ -99,7 +98,7 @@ export default {
       })
       this.loading = false
     },
-    handleTableChange (pagination, filters, sorter) {
+    handleTableChange (pagination) {
       const pager = { ...this.pagination };
       pager.current = pagination.current;
       this.pagination = pager;

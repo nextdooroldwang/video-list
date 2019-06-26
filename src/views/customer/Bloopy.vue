@@ -256,7 +256,6 @@ export default {
   methods: {
     init () {
       this.getData({ id: this.$route.params.id })
-
       this.keepId = this.$route.params.id
     },
     update () {
@@ -318,8 +317,7 @@ export default {
         software_id: selectedRowKeys[0]
       }
 
-      createRelease(p, onProgress).then(res => {
-        console.log(res)
+      createRelease(p, onProgress).then(() => {
         this.$message.success('更新成功');
         this.status = 'success'
       }).catch(err => {
@@ -338,14 +336,14 @@ export default {
       console.log(loaded, total)
 
     },
-    handleTableChange (pagination, filters, sorter) {
+    handleTableChange (pagination) {
       const pager = { ...this.pagination };
       pager.current = pagination.current;
       this.pagination = pager;
       let { pageSize, current } = this.pagination
       this.dataCurrent = this.data.slice(current * pageSize - pageSize, current * pageSize)
     },
-    handleTableChangeVersion (pagination, filters, sorter) {
+    handleTableChangeVersion (pagination) {
       const pager = { ...this.paginationVersion };
       pager.current = pagination.current;
       this.paginationVersion = pager;
@@ -353,9 +351,7 @@ export default {
       this.dataCurrentVersion = this.dataVersion.slice(current * pageSize - pageSize, current * pageSize)
     },
     onSelectChange (selectedRowKeys) {
-
       this.selectedRowKeys = selectedRowKeys.slice(-1)
-      console.log('selectedRowKeys changed: ', this.selectedRowKeys);
     },
     handleOk () {
       this.selectedRowKeys.length > 0 ? this.onSend(this.onProgress) : this.$message.error('请选择一个版本');

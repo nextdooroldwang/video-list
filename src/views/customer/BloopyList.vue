@@ -207,8 +207,6 @@ export default {
           item.expire_date = moment(item.expire_date).format('YYYY-MM-DD') || '无'
           return item
         })
-        // data = data.filter(item => (company_name ? item.company_name.indexOf(company_name) !== -1 : true) && (!service_type || service_type === '0') ? true : (service_type === item.service_type))
-
         let pagination = {
           total: data.length,
           pageSize: 10,
@@ -222,7 +220,7 @@ export default {
       })
       this.loading = false
     },
-    handleTableChange (pagination, filters, sorter) {
+    handleTableChange (pagination) {
       const pager = { ...this.pagination };
       pager.current = pagination.current;
       this.pagination = pager;
@@ -230,7 +228,6 @@ export default {
       this.dataCurrent = this.data.slice(current * pageSize - pageSize, current * pageSize)
     },
     onChangeDate (date, dateString) {
-      console.log(date, dateString);
       this.queryParam.start = dateString[0]
       this.queryParam.end = dateString[1]
     },
@@ -243,21 +240,6 @@ export default {
       if (e.key == 1) {
         this.id = id
         this.update()
-      }
-    },
-    handleSelect (row) {
-      return {
-        on: { // 事件
-          click: () => {
-            this.$router.push({
-              name: 'BloopyDetail',
-              query: {
-                id: row.id
-              }
-            })
-          },       // 点击行
-        },
-
       }
     },
     update () {
@@ -294,8 +276,7 @@ export default {
         software_id: selectedRowKeys[0]
       }
 
-      createRelease(p, onProgress).then(res => {
-        console.log(res)
+      createRelease(p, onProgress).then(() => {
         this.$message.success('更新成功');
         this.status = 'success'
       }).catch(err => {
@@ -312,9 +293,8 @@ export default {
     onProgress (loaded, total) {
       this.percent = loaded / total * 100 | 0
       console.log(loaded, total)
-
     },
-    handleTableChangeVersion (pagination, filters, sorter) {
+    handleTableChangeVersion (pagination) {
       const pager = { ...this.paginationVersion };
       pager.current = pagination.current;
       this.paginationVersion = pager;
@@ -322,9 +302,7 @@ export default {
       this.dataCurrentVersion = this.dataVersion.slice(current * pageSize - pageSize, current * pageSize)
     },
     onSelectChange (selectedRowKeys) {
-
       this.selectedRowKeys = selectedRowKeys.slice(-1)
-      console.log('selectedRowKeys changed: ', this.selectedRowKeys);
     },
     handleOk () {
       this.selectedRowKeys.length > 0 ? this.onSend(this.onProgress) : this.$message.error('请选择一个版本');

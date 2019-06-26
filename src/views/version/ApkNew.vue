@@ -97,7 +97,6 @@ export default {
   },
   methods: {
     init () {
-      console.log('forceUpdate')
       this.$forceUpdate()
       if (this.$route.query.id) {
         this.id = this.$route.query.id
@@ -142,7 +141,7 @@ export default {
       formData.append('description', info.description)
       this.uploading = true
       if (this.id) {
-        await updateApk(formData, this.onProgress, this.id).then(res => {
+        await updateApk(formData, this.onProgress, this.id).then(() => {
           this.$message.success('上传成功');
           this.status = 'success'
         }).catch(err => {
@@ -152,7 +151,7 @@ export default {
           this.statusInfo = err.response.data.message
         })
       } else {
-        await uploadApk(formData, this.onProgress).then(res => {
+        await uploadApk(formData, this.onProgress).then(() => {
           this.$message.success('上传成功');
           this.status = 'success'
         }).catch(err => {

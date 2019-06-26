@@ -27,7 +27,6 @@
         </div>
         <div class="logo">
           <img :src="info.company_logo" alt="LOGO">
-          <!-- <div>LOGO</div> -->
         </div>
       </div>
     </div>

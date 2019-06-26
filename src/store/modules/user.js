@@ -45,7 +45,7 @@ const app = {
 		},
 		// 获取用户信息
 		GetInfo({ commit }) {
-			return new Promise((resolve, reject) => {
+			return new Promise((resolve) => {
 				if (Cookies.get(ACCESS_TOKEN)) {
 					let result = {
 						name: 'mobingi',

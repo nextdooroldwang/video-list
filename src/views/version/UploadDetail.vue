@@ -141,7 +141,6 @@ export default {
     async getDetail () {
       this.loading = true
       await getRelease({ id: this.$route.params.id }).then(res => {
-        console.log(res)
         let data = res
         this.version = data.version
         this.path = data.path
@@ -165,7 +164,7 @@ export default {
       this.loading = false
     },
 
-    handleTableChange (pagination, filters, sorter) {
+    handleTableChange (pagination) {
       const pager = { ...this.pagination };
       pager.current = pagination.current;
       this.pagination = pager;
