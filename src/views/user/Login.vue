@@ -8,10 +8,7 @@
         <div class="login-lang">
           <change-lang/>
         </div>
-        <div class="login-logo">
-          <img src="../../assets/images/login_logo.png" alt>
-          <span>运维端</span>
-        </div>
+        <div class="login-logo">Mobingi-UI</div>
         <a-form>
           <a-form-item
             :validate-status="loginRules.username.status"
@@ -100,6 +97,9 @@ export default {
       },
       immediate: true
     }
+  },
+  mounted () {
+    this.handleLogin()
   },
   methods: {
     showPwd () {
@@ -199,6 +199,7 @@ $light_gray: rgba(245, 248, 251, 1);
       .login-logo {
         position: relative;
         margin-bottom: 58px;
+        font-size: 24px;
         img {
           width: 230px;
           height: 69px;
@@ -206,7 +207,7 @@ $light_gray: rgba(245, 248, 251, 1);
         span {
           background: #394eff;
           padding: 2px 4px;
-          font-size: 10px;
+
           color: #fff;
           border-radius: 5px;
           position: absolute;

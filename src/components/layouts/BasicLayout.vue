@@ -1,23 +1,21 @@
 <template>
   <a-layout id="components-layout-demo-custom-trigger">
-    <side-menu
+    <!-- <side-menu
       mode="inline"
       :menus="menus"
       theme="light"
       :collapsed="false"
       :collapsible="true"
       @menuSelect="menuSelect"
-    ></side-menu>
+    ></side-menu>-->
     <a-layout>
-      <a-layout-header style="background: #fff; padding: 0">
+      <!-- <a-layout-header style="background: #fff; padding: 0">
         <global-header @trigger="(t) => collapsed = t"/>
-      </a-layout-header>
-      <div class="breadcrumb">
+      </a-layout-header>-->
+      <!-- <div class="breadcrumb">
         <Breadcrumb/>
-      </div>
-      <a-layout-content
-        :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: 'calc(100vh - 160px)' }"
-      >
+      </div>-->
+      <a-layout-content :style="{  background: '#fff', minHeight: 'calc(100vh)' }">
         <transition name="page-transition">
           <route-view/>
         </transition>
@@ -27,7 +25,6 @@
 </template>
 <script>
 import GlobalHeader from '@/components/page/Header'
-import SideMenu from '@/components/menu/SideMenu'
 import RouteView from '@/components/layouts/RouteView'
 import Breadcrumb from '@/components/page/Breadcrumb'
 import { mapState } from 'vuex'
@@ -40,7 +37,6 @@ export default {
   },
   components: {
     GlobalHeader,
-    SideMenu,
     RouteView,
     Breadcrumb
   },

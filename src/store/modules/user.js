@@ -33,8 +33,10 @@ const app = {
 			return new Promise((resolve, reject) => {
 				login(userInfo)
 					.then(response => {
-						Cookies.set(ACCESS_TOKEN, response.token_type + ' ' + response.access_token, { expires: 1 })
-						commit('SET_TOKEN', response.token_type + ' ' + response.access_token)
+						Cookies.set(ACCESS_TOKEN, 'abc', { expires: 1 })
+						// Cookies.set(ACCESS_TOKEN, response.token_type + ' ' + response.access_token, { expires: 1 })
+						commit('SET_TOKEN', 'abc')
+						// commit('SET_TOKEN', response.token_type + ' ' + response.access_token)
 						resolve()
 					})
 					.catch(error => {
@@ -45,7 +47,7 @@ const app = {
 		},
 		// 获取用户信息
 		GetInfo({ commit }) {
-			return new Promise((resolve) => {
+			return new Promise(resolve => {
 				if (Cookies.get(ACCESS_TOKEN)) {
 					let result = {
 						name: 'mobingi',

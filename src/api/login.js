@@ -16,12 +16,16 @@ export function login({ username, password }) {
 		scope: '*',
 		username,
 		password
-	}
-	return axios({
-		url: loginURL,
-		method: 'post',
-		data: QS.stringify(parms)
-	})
+  }
+  return new Promise(resolve => {
+   
+    resolve()
+  })
+	// return axios({
+	// 	url: loginURL,
+	// 	method: 'post',
+	// 	data: QS.stringify(parms)
+	// })
 }
 
 export function logout() {}
